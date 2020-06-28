@@ -1,8 +1,5 @@
 package ozonelang.ozone.core;
 
-
-import org.kaivos.nept.parser.TokenScanner;
-
 import java.util.Scanner;
 
 public class Main {
