@@ -1,4 +1,4 @@
-package main.java.ozonelang.ozone.core.AST;
+package ozonelang.ozone.core.AST;
 
 public class Location {
     private String source;

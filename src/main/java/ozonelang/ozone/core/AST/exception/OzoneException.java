@@ -1,6 +1,6 @@
-package main.java.ozonelang.ozone.core.AST.exception;
+package ozonelang.ozone.core.AST.exception;
 
-import main.java.ozonelang.ozone.core.AST.Span;
+import ozonelang.ozone.core.AST.Span;
 
 public class OzoneException extends RuntimeException {
 
