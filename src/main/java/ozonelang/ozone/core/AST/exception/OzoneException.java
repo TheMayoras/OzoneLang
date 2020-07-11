@@ -1,32 +1,36 @@
 package ozonelang.ozone.core.AST.exception;
 
-import ozonelang.ozone.core.AST.Span;
+import ozonelang.ozone.core.AST.Location;
 
-public class OzoneException extends RuntimeException {
+public class OzoneException {
+    public final StackTrace trace;
+    public final int traceLength;
+    public final String name;
+    public final boolean fatal;
 
-    private Span span;
-    private OzoneException nestedException;
-
-    public OzoneException(Span span) {
-        super("The span " + span + " caused an exception");
-        this.span = span;
+    public OzoneException(String name, StackTrace trace, boolean fatal) {
+        this.trace = trace;
+        this.traceLength = trace.length();
+        this.name = name;
+        this.fatal = fatal;
     }
 
-    public OzoneException(Span span, String message) {
-        super(message);
-        this.span = span;
+    public OzoneException(String name, boolean fatal, Location... locations) {
+        this.trace = new StackTrace(locations);
+        this.traceLength = trace.length();
+        this.name = name;
+        this.fatal = fatal;
     }
 
-    public OzoneException(Span span, OzoneException nestedException) {
-        super("The span " + span + " caused an exception");
-        this.span = span;
-        this.nestedException = nestedException;
+    public static void raise(OzoneException ex) {
+        var stream = ex.trace.getOutputStream();
+        var locs = ex.trace.getLocations();
+        stream.printf(
+                "[%s occurred at file '%s', line %s]",
+                ex.name,
+                locs.get(0).getFile(),
+                locs.get(0).getLine()
+        );
+        ex.trace.printTrace();
     }
-
-    public OzoneException(Span span, String message, OzoneException nestedException) {
-        super(message);
-        this.span = span;
-        this.nestedException = nestedException;
-    }
-
 }
