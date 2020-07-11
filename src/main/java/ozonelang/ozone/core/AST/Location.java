@@ -2,11 +2,13 @@ package ozonelang.ozone.core.AST;
 
 public class Location {
     private String source;
+    private String file;
     private long line;
     private long column;
 
-    public Location(String source, long line, long column) {
+    public Location(String file, String source, long line, long column) {
         this.source = source;
+        this.file = file;
         this.line = line;
         this.column = column;
     }
@@ -33,5 +35,13 @@ public class Location {
 
     public void setColumn(long column) {
         this.column = column;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    public String getFile() {
+        return file;
     }
 }
