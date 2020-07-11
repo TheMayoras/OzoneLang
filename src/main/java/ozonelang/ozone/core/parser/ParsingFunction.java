@@ -1,4 +1,4 @@
-package ozonelang.ozone.core;
+package ozonelang.ozone.core.parser;
 
 public @interface ParsingFunction {
     public String parent() default "";
