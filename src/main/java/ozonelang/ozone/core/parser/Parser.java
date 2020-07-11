@@ -23,6 +23,7 @@ public final class Parser {
                 .addStringRule('"', '"', '\\')
                 .appendOnEOF("<EOF>");
     }
+    @ParsingFunction(parent = "parse", expression = "$r = 4")
     private void parseVariable(TokenList tokens) throws Exception {
         if (tokens.isNext("$"))
             tokens.shift();
@@ -35,6 +36,7 @@ public final class Parser {
             tokens.shift();
         tokens.shift();
     }
+    @ParsingFunction
     public void parse(String source, String filename) throws Exception {
         tokens = tokenScanner.tokenize(source, filename);
         System.out.println(tokens);
