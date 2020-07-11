@@ -7,6 +7,17 @@
     <groupId>ozonelang</groupId>
     <artifactId>ozone</artifactId>
     <version>0.1</version>
+    <developers>
+        <developer>
+            <id>TheMayoras</id>
+            <name>Ben Mayoras</name>
+        </developer>
+        <developer>
+            <id>vipurapu</id>
+            <name>Valio Valtokari</name>
+            <email>ubuntugeek1904@gmail.com</email>
+        </developer>
+    </developers>
     <build>
         <plugins>
             <plugin>
