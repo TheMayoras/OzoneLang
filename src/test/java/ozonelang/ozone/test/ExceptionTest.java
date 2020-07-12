@@ -1,7 +1,6 @@
 package ozonelang.ozone.test;
 
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 import static ozonelang.ozone.core.AST.exception.OzoneException.raiseEx;
 import ozonelang.ozone.core.AST.exception.OzoneException;
 import ozonelang.ozone.core.AST.Location;
