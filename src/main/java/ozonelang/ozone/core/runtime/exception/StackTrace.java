@@ -1,6 +1,6 @@
 package ozonelang.ozone.core.runtime.exception;
 
-import ozonelang.ozone.core.AST.Location;
+import ozonelang.ozone.core.AST.Context;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -11,27 +11,27 @@ import java.util.List;
 import static java.lang.System.out;
 
 public class StackTrace {
-    private List<Location> codePoints = new ArrayList<>();
+    private List<Context> codePoints = new ArrayList<>();
     private final PrintStream outStream;
-    public StackTrace(Location location, Location... locations) {
-        codePoints.addAll(Arrays.asList(locations));
-        codePoints.add(location);
+    public StackTrace(Context context, Context... contexts) {
+        codePoints.addAll(Arrays.asList(contexts));
+        codePoints.add(context);
         outStream = out;
     }
-    public StackTrace(PrintStream output, Location location, Location... locations) {
+    public StackTrace(PrintStream output, Context context, Context... contexts) {
         outStream = output;
-        codePoints.addAll(Arrays.asList(locations));
-        codePoints.add(location);
+        codePoints.addAll(Arrays.asList(contexts));
+        codePoints.add(context);
     }
-    StackTrace(Location... locations) {
+    StackTrace(Context... contexts) {
         outStream = out;
-        codePoints.addAll(Arrays.asList(locations));
+        codePoints.addAll(Arrays.asList(contexts));
     }
-    public List<Location> getLocations() {
+    public List<Context> getLocations() {
         return Collections.unmodifiableList(codePoints);
     }
-    public void addLocation(Location location) {
-        codePoints.add(location);
+    public void addLocation(Context context) {
+        codePoints.add(context);
     }
     public PrintStream getOutputStream() {
         return outStream;

@@ -1,6 +1,6 @@
 package ozonelang.ozone.core.runtime.exception;
 
-import ozonelang.ozone.core.AST.Location;
+import ozonelang.ozone.core.AST.Context;
 
 import static java.lang.System.exit;
 
@@ -8,43 +8,52 @@ public class OzoneException {
     public final StackTrace trace;
     public final int traceLength;
     public final String name;
+    public final String message;
     public final int exitCode;
     private boolean fatal;
 
-    public OzoneException(String name, StackTrace trace, boolean fatal) {
+    public OzoneException(String message, String name, StackTrace trace, boolean fatal) {
         this.trace = trace;
         this.traceLength = trace.length();
         this.name = name;
         this.fatal = fatal;
+        this.message = message;
         this.exitCode = 2;
     }
 
-    public OzoneException(String name, StackTrace trace, boolean fatal, int exitCode) {
+    public OzoneException(String message, String name, StackTrace trace, boolean fatal, int exitCode) {
         this.trace = trace;
         this.traceLength = trace.length();
         this.name = name;
         this.fatal = fatal;
+        this.message = message;
         this.exitCode = exitCode;
     }
 
-    public OzoneException(String name, boolean fatal, Location... locations) {
-        this.trace = new StackTrace(locations);
+    public OzoneException(String message, String name, boolean fatal, Context... contexts) {
+        this.trace = new StackTrace(contexts);
         this.traceLength = trace.length();
         this.name = name;
         this.fatal = fatal;
+        this.message = message;
         this.exitCode = 2;
     }
 
-    public OzoneException(String name, boolean fatal, int exitCode, Location... locations) {
-        this.trace = new StackTrace(locations);
+    public OzoneException(String message, String name, boolean fatal, int exitCode, Context... contexts) {
+        this.trace = new StackTrace(contexts);
         this.traceLength = trace.length();
         this.name = name;
         this.fatal = fatal;
+        this.message = message;
         this.exitCode = exitCode;
     }
 
     public boolean isFatal() {
         return fatal;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     /*public static void catchEx(OzoneException ex) {
@@ -55,10 +64,11 @@ public class OzoneException {
         var stream = ex.trace.getOutputStream();
         var locs = ex.trace.getLocations();
         stream.printf(
-                "[%s occurred at file '%s', line %s]\n",
+                "[%s occurred at file '%s', line %s, message: '%s']\n",
                 ex.name,
                 locs.get(0).getFile(),
-                locs.get(0).getLine()
+                locs.get(0).getLine(),
+                ex.getMessage()
         );
         ex.trace.printTrace();
         if (ex.isFatal()) {
