@@ -11,6 +11,12 @@ public class Context {
         this.line = line;
     }
 
+    public Context(String file, String source, int line) {
+        this.source = source;
+        this.file = file;
+        this.line = (long) line;
+    }
+
     public String getSource() {
         return source;
     }
