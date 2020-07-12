@@ -1,11 +1,11 @@
 package ozonelang.ozone.core.AST;
 
-public class Location {
+public class Context {
     private String source;
     private String file;
     private long line;
 
-    public Location(String file, String source, long line) {
+    public Context(String file, String source, long line) {
         this.source = source;
         this.file = file;
         this.line = line;
