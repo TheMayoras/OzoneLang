@@ -2,14 +2,9 @@ package ozonelang.ozone.core.runtime.classloader;
 
 import ozonelang.ozone.core.AST.Context;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
 
