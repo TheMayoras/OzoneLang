@@ -1,10 +1,10 @@
 package ozonelang.ozone.test;
 
 import org.junit.Test;
-import static ozonelang.ozone.core.AST.exception.OzoneException.raiseEx;
-import ozonelang.ozone.core.AST.exception.OzoneException;
+import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
+import ozonelang.ozone.core.runtime.exception.OzoneException;
 import ozonelang.ozone.core.AST.Location;
-import ozonelang.ozone.core.AST.exception.StackTrace;
+import ozonelang.ozone.core.runtime.exception.StackTrace;
 
 public class ExceptionTest {
     @Test

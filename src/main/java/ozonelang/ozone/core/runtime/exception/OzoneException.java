@@ -61,8 +61,9 @@ public class OzoneException {
                 locs.get(0).getLine()
         );
         ex.trace.printTrace();
-        if (ex.isFatal())
+        if (ex.isFatal()) {
             stream.printf("Unrecoverable error, terminating with exit code %d\n", ex.exitCode);
             exit(ex.exitCode);
+        }
     }
 }
