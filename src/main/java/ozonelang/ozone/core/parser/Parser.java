@@ -8,7 +8,6 @@ import org.kaivos.nept.parser.TokenScanner;
 import java.util.Arrays;
 
 public final class Parser {
-    private final String endOfLineIdentifier = ";";
     private final TokenScanner tokenScanner;
     private TokenList tokens;
     private final static String EOF = "<EOF>";
@@ -19,12 +18,14 @@ public final class Parser {
                 .addEscapeCode('\n', System.lineSeparator())
                 .addOperators("*-.,:;*/%&$()[]{}+_><")
                 .addOperatorRule(":=")
+                .addOperatorRule("..")
+                .addOperatorRule("...")
                 .addStringRule("'", "'", '\\')
                 .addStringRule('"', '"', '\\')
                 .appendOnEOF("<EOF>");
     }
     @ParsingFunction(parent = "parse", expression = "$r = 4")
-    private void parseVariable(TokenList tokens) throws Exception {
+    private static void parseVariable(TokenList tokens) throws Exception {
         if (tokens.isNext("$"))
             tokens.shift();
         Token varName = tokens.next();
@@ -44,12 +45,13 @@ public final class Parser {
             if (tokens.isNext("$")) parseVariable(tokens);
         }
     }
-    private Token acceptIdentifier(TokenList tl) {
+    @ParsingFunction(parent = "parseVariable", expression = "myInteger")
+    public static Token parseIdentifier(TokenList tl) {
         if (!validIdentifier(tl.seekString()))
             throw new ParsingException(TokenList.expected("identifier"), tl.seek());
-        return tl.seek();
+        return tl.next();
     }
-    private boolean validIdentifier(String applicant) {
+    private static boolean validIdentifier(String applicant) {
         String numberRe = "[0-9]+";
         /*
          * It's an integer, a long, a float, or a short.
@@ -96,17 +98,17 @@ public final class Parser {
         return false;
     }
     @ParsingFunction(parent = "parse", expression = "#[annotation]")
-    private void parseAnnotation(TokenList tl) {
+    private static void parseAnnotation(TokenList tl) {
         if (tl.isNext("#"))
             tl.shift();
         tl.accept("[");
-        acceptIdentifier(tl);
+        parseIdentifier(tl);
         if (tl.acceptIfNext("(")) {
 
         }
     }
     /*@ParsingFunction(parent = "parseAnnotation", expression = "(5, 7.34)")
-    private void parseArgumentQueue(TokenList tl) {
+    private static void parseArgumentQueue(TokenList tl) {
         if (tl.isNext("("))
             tl.shift();
         Token arg;
