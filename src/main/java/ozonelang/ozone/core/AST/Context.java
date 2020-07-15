@@ -3,18 +3,21 @@ package ozonelang.ozone.core.AST;
 public class Context {
     private String source;
     private String file;
-    private long line;
+    private long startLine;
+    private long endLine;
 
-    public Context(String file, String source, long line) {
+    public Context(String file, String source, long startLine, long endLine) {
         this.source = source;
         this.file = file;
-        this.line = line;
+        this.endLine = endLine;
+        this.startLine = startLine;
     }
 
-    public Context(String file, String source, int line) {
+    public Context(String file, String source, int startLine, int endLine) {
         this.source = source;
         this.file = file;
-        this.line = (long) line;
+        this.endLine = (long) endLine;
+        this.startLine = (long) startLine;
     }
 
     public String getSource() {
@@ -25,12 +28,20 @@ public class Context {
         this.source = source;
     }
 
-    public long getLine() {
-        return line;
+    public long getStartLine() {
+        return startLine;
     }
 
-    public void setLine(long line) {
-        this.line = line;
+    public void setEndLine(long endLine) {
+        this.endLine = endLine;
+    }
+
+    public long getEndLine() {
+        return endLine;
+    }
+
+    public void setStartLine(long startLine) {
+        this.startLine = startLine;
     }
 
     public void setFile(String file) {
