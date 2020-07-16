@@ -13,9 +13,8 @@ import static java.lang.System.out;
 public class StackTrace {
     private List<Context> codePoints = new ArrayList<>();
     private final PrintStream outStream;
-    public StackTrace(Context context, Context... contexts) {
+    public StackTrace(Context... contexts) {
         codePoints.addAll(Arrays.asList(contexts));
-        codePoints.add(context);
         outStream = out;
     }
     public StackTrace(PrintStream output, Context context, Context... contexts) {
@@ -23,14 +22,10 @@ public class StackTrace {
         codePoints.addAll(Arrays.asList(contexts));
         codePoints.add(context);
     }
-    StackTrace(Context... contexts) {
-        outStream = out;
-        codePoints.addAll(Arrays.asList(contexts));
-    }
     public List<Context> getLocations() {
         return Collections.unmodifiableList(codePoints);
     }
-    public void addLocation(Context context) {
+    public void addContext(Context context) {
         codePoints.add(context);
     }
     public PrintStream getOutputStream() {
@@ -42,7 +37,7 @@ public class StackTrace {
     }
     public void printTrace() {
         for (int i = 1; i < codePoints.size(); i++) {
-            outStream.printf("\t[at file '%s', line %s]\n", codePoints.get(i).getFile(), codePoints.get(i).getLine());
+            outStream.printf("\t[at file '%s', line %s]\n", codePoints.get(i).getFile(), codePoints.get(i).getStartLine());
         }
     }
 }

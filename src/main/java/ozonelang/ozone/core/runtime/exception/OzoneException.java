@@ -29,13 +29,29 @@ public class OzoneException {
         this.message = message;
         this.exitCode = exitCode;
     }
-
+    public OzoneException(Throwable nested, StackTrace trace, boolean fatal) {
+        this.trace = trace;
+        this.traceLength = trace.length();
+        this.name = nested.getClass().getCanonicalName();
+        this.fatal = fatal;
+        this.message = nested.getMessage();
+        this.exitCode = 2;
+    }
     public OzoneException(String message, String name, boolean fatal, Context... contexts) {
         this.trace = new StackTrace(contexts);
         this.traceLength = trace.length();
         this.name = name;
         this.fatal = fatal;
         this.message = message;
+        this.exitCode = 2;
+    }
+
+    public OzoneException(Throwable nested, boolean fatal, Context... contexts) {
+        this.trace = new StackTrace(contexts);
+        this.traceLength = trace.length();
+        this.name = nested.getClass().getCanonicalName();
+        this.fatal = fatal;
+        this.message = nested.getMessage();
         this.exitCode = 2;
     }
 
@@ -47,7 +63,14 @@ public class OzoneException {
         this.message = message;
         this.exitCode = exitCode;
     }
-
+    public OzoneException(Throwable nested, boolean fatal, int exitCode, Context... contexts) {
+        this.trace = new StackTrace(contexts);
+        this.traceLength = trace.length();
+        this.name = nested.getClass().getCanonicalName();
+        this.fatal = fatal;
+        this.message = nested.getMessage();
+        this.exitCode = exitCode;
+    }
     public boolean isFatal() {
         return fatal;
     }
@@ -67,7 +90,7 @@ public class OzoneException {
                 "[%s occurred at file '%s', line %s, message: '%s']\n",
                 ex.name,
                 locs.get(0).getFile(),
-                locs.get(0).getLine(),
+                locs.get(0).getStartLine(),
                 ex.getMessage()
         );
         ex.trace.printTrace();
@@ -75,5 +98,12 @@ public class OzoneException {
             stream.printf("Unrecoverable error, terminating with exit code %d\n", ex.exitCode);
             exit(ex.exitCode);
         }
+    }
+    public static void raiseEx(Throwable nested, boolean fatal, Context... contexts) {
+        var trace = new StackTrace(contexts[0]);
+        for (var i = 1; i < contexts.length; i++)
+            trace.addContext(contexts[i]);
+        var ex = new OzoneException(nested, fatal, contexts);
+        raiseEx(ex);
     }
 }
