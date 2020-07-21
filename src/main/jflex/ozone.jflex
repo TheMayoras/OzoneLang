@@ -31,7 +31,7 @@ import ozonelang.ozone.core.AST.SymbolType;
 %public
 %line
 %column
-%apiprivate
+//%apiprivate
 %type Token
 %ctorarg String file
 %ctorarg String eof
@@ -49,12 +49,12 @@ import ozonelang.ozone.core.AST.SymbolType;
 
     StringBuilder string = new StringBuilder();
 
-    private Token makeToken(SymbolType sym, Object value, int line, int col) {
-        return new Token(file, sym, value, line, col);
+    private Token makeToken(SymbolType sym, Object value) {
+        return new Token(file, sym, value, getLine(), getColumn());
     }
 
-    private Token makeToken(SymbolType sym, int line, int col) {
-        return new Token(file, sym, line, col);
+    private Token makeToken(SymbolType sym) {
+        return new Token(file, sym, getLine(), getColumn());
     }
 
     public String getFile() {
@@ -81,6 +81,18 @@ import ozonelang.ozone.core.AST.SymbolType;
         }
         return tokens;
     }
+
+    private Token lexBool() {
+        switch (yytext()) {
+            case "yes":
+                return makeToken(SymbolType.YES);
+            case "no":
+                return makeToken(SymbolType.NO);
+            case "nothing":
+                return makeToken(SymbolType.NOTHING);
+        }
+        return new Token("", SymbolType.NOTHING, 0, 0);
+    }
 %}
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
@@ -93,29 +105,47 @@ EndOfLineComment     = "//" {InputCharacter}* {LineTerminator}?
 DocumentationComment = "/+" {CommentContent} "+/"
 CommentContent       = ( [^*] | \*+ [^/*] )*
 
-Identifier = [:jletter:] [:jletterdigit:]*
+Boolean = "yes" | "no" | "nothing"
+Identifier = [_a-zA-Z][_a-zA-Z0-9]+ | _+
 DecIntegerLiteral = 0 | [1-9][0-9]*
 DoubleLiteral = {DecIntegerLiteral} + "." + {DecIntegerLiteral}
-Boolean = "yes" | "no"
 %state STRING
 %%
 /* keywords */
-<YYINITIAL> "func"              { return makeToken(SymbolType.FUNC, yyline, yycolumn); }
-<YYINITIAL> "bool"              { return makeToken(SymbolType.BOOL, yyline, yycolumn); }
-<YYINITIAL> "break"             { return makeToken(SymbolType.BREAK, yyline, yycolumn); }
+<YYINITIAL> "func"              { return makeToken(SymbolType.FUNC); }
+<YYINITIAL> "bool"              { return makeToken(SymbolType.BOOL); }
+<YYINITIAL> "break"             { return makeToken(SymbolType.BREAK); }
+<YYINITIAL> "if"                { return makeToken(SymbolType.IF); }
+<YYINITIAL> "else"              { return makeToken(SymbolType.ELSE); }
+<YYINITIAL> "elif"              { return makeToken(SymbolType.ELIF); }
+<YYINITIAL> "when"              { return makeToken(SymbolType.WHEN); }
+<YYINITIAL> "is"                { return makeToken(SymbolType.IS); }
 
 <YYINITIAL> {
+    /* booleans (and `nothing`) */
+    {Boolean}                      { return lexBool(); }
+
     /* identifiers */
-    {Identifier}                   { return makeToken(SymbolType.IDENTIFIER, yytext(), yyline, yycolumn); }
+    {Identifier}                   { return makeToken(SymbolType.IDENTIFIER, yytext()); }
 
     /* literals */
-    {DecIntegerLiteral}            { return makeToken(SymbolType.INTEGER_LITERAL, yytext(), yyline, yycolumn); }
-    \"                             { string.setLength(0); yybegin(STRING); }
+    {DecIntegerLiteral}            { return makeToken(SymbolType.INTEGER_LITERAL, yytext()); }
+    \" | '                         { string.setLength(0); yybegin(STRING); }
 
     /* operators */
-    "="                            { return makeToken(SymbolType.ASSIGN, yyline, yycolumn); }
-    "=="                           { return makeToken(SymbolType.EQ, yyline, yycolumn); }
-    "+"                            { return makeToken(SymbolType.PLUS, yyline, yycolumn); }
+    "=="                           { return makeToken(SymbolType.EQ); }
+    "!"                            { return makeToken(SymbolType.NOT); }
+    "!="                           { return makeToken(SymbolType.NOTEQ); }
+    "="                            { return makeToken(SymbolType.ASSIGN); }
+    "+"                            { return makeToken(SymbolType.PLUS); }
+    "$"                            { return makeToken(SymbolType.VAR); }
+    "..."                          { return makeToken(SymbolType.CONCAT_COMMA); }
+    ".."                           { return makeToken(SymbolType.CONCAT_SPACE); }
+    "."                            { return makeToken(SymbolType.DOT); }
+    ":"                            { return makeToken(SymbolType.COLON); }
+    "::"                           { return makeToken(SymbolType.MODULE_SEPARATOR); }
+    "@"                            { return makeToken(SymbolType.AT); }
+    "#"                            { return makeToken(SymbolType.HASHTAG); }
 
     /* comments */
     {Comment}                      { /* ignore */ }
@@ -124,16 +154,16 @@ Boolean = "yes" | "no"
     {WhiteSpace}                   { /* ignore */ }
 }
 <STRING> {
-      \" | '                         { yybegin(YYINITIAL);
-                                       return makeToken(SymbolType.STRING_LITERAL,
-                                       string.toString(), yyline, yycolumn); }
-      [^\n\r\"\\]+                   { string.append(yytext()); }
+      \" | '                         { yybegin(YYINITIAL); return makeToken(SymbolType.STRING_LITERAL, string.toString()); }
+      [^\n\r[\"|\']\\]+              { string.append( yytext() ); }
       \\t                            { string.append('\t'); }
-      \\n                            { string.append(System.lineSeparator()); }
+      \\n                            { string.append('\n'); }
 
       \\r                            { string.append('\r'); }
-      \\\" | '                       { string.append('\"'); }
+      \\\"                           { string.append('\"'); }
+      \\\'                           { string.append('\''); }
       \\                             { string.append('\\'); }
+      <<EOF>>                        { throw new ParsingError("unexpected EOF in middle of a string literal",
+                                        this.file, yytext(), getLine(), getColumn()); }
 }
-
-    [^]                              { throw new ParsingError(this.file, yytext(), yyline, yycolumn); }
+[^]                              { throw new ParsingError(this.file, yytext(), getLine(), getColumn()); }
