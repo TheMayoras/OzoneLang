@@ -31,7 +31,7 @@ import ozonelang.ozone.core.AST.SymbolType;
 %public
 %line
 %column
-//%apiprivate
+%apiprivate
 %type Token
 %ctorarg String file
 %ctorarg String eof
