@@ -1,6 +1,4 @@
-package ozonelang.ozone.core.AST;
-
-import ozonelang.ozone.core.lexer.Lexer;
+package ozonelang.ozone.core.lexer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import static ozonelang.ozone.core.AST.ParsingError.expected;
+import static ozonelang.ozone.core.lexer.ParsingError.expected;
 
 public class TokenStream {
     private Lexer lexer;

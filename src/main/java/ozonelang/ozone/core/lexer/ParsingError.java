@@ -1,4 +1,4 @@
-package ozonelang.ozone.core.AST;
+package ozonelang.ozone.core.lexer;
 
 public class ParsingError extends RuntimeException {
     public final String token;
