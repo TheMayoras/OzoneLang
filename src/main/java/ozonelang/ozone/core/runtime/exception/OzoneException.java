@@ -9,8 +9,7 @@ public class OzoneException {
     public final int traceLength;
     public final String name;
     public final String message;
-    public final int exitCode;
-    private boolean fatal;
+    private final boolean fatal;
 
     public OzoneException(String message, String name, StackTrace trace, boolean fatal) {
         this.trace = trace;
@@ -18,24 +17,14 @@ public class OzoneException {
         this.name = name;
         this.fatal = fatal;
         this.message = message;
-        this.exitCode = 2;
     }
 
-    public OzoneException(String message, String name, StackTrace trace, boolean fatal, int exitCode) {
-        this.trace = trace;
-        this.traceLength = trace.length();
-        this.name = name;
-        this.fatal = fatal;
-        this.message = message;
-        this.exitCode = exitCode;
-    }
     public OzoneException(Throwable nested, StackTrace trace, boolean fatal) {
         this.trace = trace;
         this.traceLength = trace.length();
         this.name = nested.getClass().getCanonicalName();
         this.fatal = fatal;
         this.message = nested.getMessage();
-        this.exitCode = 2;
     }
     public OzoneException(String message, String name, boolean fatal, Context... contexts) {
         this.trace = new StackTrace(contexts);
@@ -43,7 +32,6 @@ public class OzoneException {
         this.name = name;
         this.fatal = fatal;
         this.message = message;
-        this.exitCode = 2;
     }
 
     public OzoneException(Throwable nested, boolean fatal, Context... contexts) {
@@ -52,25 +40,8 @@ public class OzoneException {
         this.name = nested.getClass().getCanonicalName();
         this.fatal = fatal;
         this.message = nested.getMessage();
-        this.exitCode = 2;
     }
 
-    public OzoneException(String message, String name, boolean fatal, int exitCode, Context... contexts) {
-        this.trace = new StackTrace(contexts);
-        this.traceLength = trace.length();
-        this.name = name;
-        this.fatal = fatal;
-        this.message = message;
-        this.exitCode = exitCode;
-    }
-    public OzoneException(Throwable nested, boolean fatal, int exitCode, Context... contexts) {
-        this.trace = new StackTrace(contexts);
-        this.traceLength = trace.length();
-        this.name = nested.getClass().getCanonicalName();
-        this.fatal = fatal;
-        this.message = nested.getMessage();
-        this.exitCode = exitCode;
-    }
     public boolean isFatal() {
         return fatal;
     }
@@ -96,8 +67,7 @@ public class OzoneException {
         );
         ex.trace.printTrace();
         if (ex.isFatal()) {
-            stream.printf("Unrecoverable error, terminating with exit code %d\n", ex.exitCode);
-            exit(ex.exitCode);
+            exit(1);
         }
     }
     public static void raiseEx(Throwable nested, boolean fatal, Context... contexts) {

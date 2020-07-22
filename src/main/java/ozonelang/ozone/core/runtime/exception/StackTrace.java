@@ -37,7 +37,8 @@ public class StackTrace {
     }
     public void printTrace() {
         for (int i = 1; i < codePoints.size(); i++) {
-            outStream.printf("\t[at file '%s', line %s]\n", codePoints.get(i).getFile(), codePoints.get(i).getStartLine());
+            outStream.printf("\t[at file '%s', line %s, column %d]\n", codePoints.get(i).getFile(),
+                    codePoints.get(i).getStartLine(), codePoints.get(i).getStartCol());
         }
     }
 }
