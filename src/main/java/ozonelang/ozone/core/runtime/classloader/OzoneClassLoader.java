@@ -1,6 +1,6 @@
 package ozonelang.ozone.core.runtime.classloader;
 
-import ozonelang.ozone.core.AST.Context;
+import ozonelang.ozone.core.lexer.Context;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

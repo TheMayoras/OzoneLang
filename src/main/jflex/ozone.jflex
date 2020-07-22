@@ -20,10 +20,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
 
-import ozonelang.ozone.core.AST.Token;
-import ozonelang.ozone.core.AST.TokenStream;
-import ozonelang.ozone.core.AST.ParsingError;
-import ozonelang.ozone.core.AST.SymbolType;
+import ozonelang.ozone.core.runtime.exception.OzoneException;
+import ozonelang.ozone.core.runtime.exception.StackTrace;
 
 %%
 %class Lexer

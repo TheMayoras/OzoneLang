@@ -1,8 +1,8 @@
 package ozonelang.ozone.core.parser;
 
-import ozonelang.ozone.core.AST.SymbolType;
-import ozonelang.ozone.core.AST.TokenStream;
 import ozonelang.ozone.core.lexer.Lexer;
+import ozonelang.ozone.core.lexer.SymbolType;
+import ozonelang.ozone.core.lexer.TokenStream;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,14 +15,14 @@ public final class Parser {
     private final Lexer lexer;
     public static final String EOF = "<EOF>";
 
-    public Parser(InputStream in, String filename, String eof) throws IOException {
-        lexer = new Lexer(new InputStreamReader(in), filename, eof);
+    public Parser(InputStream in, String filename) throws IOException {
+        lexer = new Lexer(new InputStreamReader(in), filename);
         stream = TokenStream.open(lexer);
         stream.addEOFMark(EOF);
     }
 
-    public Parser(File file, String eof) throws IOException {
-        this(new FileInputStream(file), file.getName(), eof);
+    public Parser(File file) throws IOException {
+        this(new FileInputStream(file), file.getName());
     }
 
     @ParsingFunction(parent = "parse", expression = "$r = 5")
@@ -35,6 +35,9 @@ public final class Parser {
         while (!stream.isNext(EOF)) {
             if (stream.isNext(SymbolType.VAR)) {
                 parseVariable(stream);
+            }
+            if (stream.isNext(SymbolType.MOD)) {
+                //parseModule(stream);
             }
         }
     }
