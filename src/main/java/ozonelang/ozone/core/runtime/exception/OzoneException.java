@@ -58,7 +58,7 @@ public class OzoneException {
         var stream = ex.trace.getOutputStream();
         var locs = ex.trace.getLocations();
         stream.printf(
-                "[%s occurred at file '%s', line %s, col %s. Message: '%s']\n",
+                "[%s occurred at file '%s', line %s, column %s]\n[Message: '%s']\n",
                 ex.name,
                 locs.get(0).getFile(),
                 locs.get(0).getStartLine(),

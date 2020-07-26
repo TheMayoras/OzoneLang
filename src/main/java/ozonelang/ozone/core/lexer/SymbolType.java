@@ -10,6 +10,7 @@ public enum SymbolType {
     CONCAT_SPACE,
     DOT,
     ELIF,
+    IN,
     ELSE,
     EOF,
     USE,

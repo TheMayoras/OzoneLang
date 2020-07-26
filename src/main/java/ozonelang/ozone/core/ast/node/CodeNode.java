@@ -1,0 +1,63 @@
+package ozonelang.ozone.core.ast.node;
+
+import ozonelang.ozone.core.lexer.Context;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * A base class representing a statement
+ * or block in source code.
+ */
+public abstract class CodeNode {
+    /**
+     * Get the children of this CodeNode
+     */
+    public abstract List<CodeNode> getChildren();
+
+    /**
+     * Returns the parent node of this CodeNode.
+     * Every CodeNode has a parent, except for {@link RootNode}
+     */
+    public abstract CodeNode getParent();
+
+    /**
+     * Whether this CodeNode is a value expression or not
+     */
+    public abstract boolean hasReturnValue();
+
+    /**
+     * The contexts of this CodeNode
+     */
+    protected List<Context> contexts = new ArrayList<>();
+
+    /**
+     * Get the contexts of this CodeNode
+     * @return The contexts of this CodeNode
+     */
+    public List<Context> getContexts() {
+        return contexts;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s %d:%d-%d:%d]",
+                             contexts.get(1).getFile(),
+                             contexts.get(1).getStartLine(),
+                             contexts.get(1).getStartCol(),
+                             contexts.get(1).getStartLine(),
+                             contexts.get(1).getEndCol()
+        );
+    }
+
+    /**
+     * Creates a new instance of CodeNode
+     *
+     * @param contexts The {@link Context} objects
+     * this CodeNode is related to
+     */
+    public CodeNode(Context... contexts) {
+        this.contexts.addAll(Arrays.asList(contexts));
+    }
+}

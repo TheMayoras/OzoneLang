@@ -15,7 +15,7 @@ public class TokenStream {
     private int idx;
     private boolean addedEOF = false;
 
-    public TokenStream(List<Token> tokens) throws IOException {
+    public TokenStream(List<Token> tokens) {
         tokens.remove(tokens.size() - 1);
         this.tokens = tokens;
         idx = 0;

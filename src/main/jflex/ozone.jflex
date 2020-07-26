@@ -23,6 +23,7 @@ import java.io.IOException;
 import ozonelang.ozone.core.runtime.exception.OzoneException;
 import ozonelang.ozone.core.runtime.exception.StackTrace;
 
+import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
 %%
 %class Lexer
 %unicode
@@ -76,25 +77,6 @@ import ozonelang.ozone.core.runtime.exception.StackTrace;
         return tokens;
     }
 
-    private enum CommentType {
-        DOC,
-        EOL,
-        BLOCK,
-    }
-
-    private CommentType commentType;
-
-    private CommentType getCommentType() {
-        switch (yytext()) {
-            case "/+":
-                return CommentType.DOC;
-            case "/*":
-                return CommentType.BLOCK;
-            default:
-                return CommentType.EOL;
-        }
-    }
-
     private Token lexBool() {
         switch (yytext()) {
             case "yes":
@@ -121,11 +103,12 @@ CommentContent       = ( [^*] | \*+ [^/*] )*
 
 Boolean = "yes" | "no" | "nothing"
 DecIntegerLiteral = 0 | [1-9][0-9]*
-FloatLiteral = {DecIntegerLiteral} + "." + {DecIntegerLiteral}
+FloatLiteral = {DecIntegerLiteral}? + "." + {DecIntegerLiteral}
 LongLiteral = {DecIntegerLiteral} + ( "l" | "L" )
 ShortLiteral = {DecIntegerLiteral} + ( "s" | "S" )
 Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
 %state STRING
+%state SINGLE_STRING
 %%
 /* keywords */
 <YYINITIAL> "func"              { return makeToken(SymbolType.FUNC); }
@@ -136,6 +119,7 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
 <YYINITIAL> "elif"              { return makeToken(SymbolType.ELIF); }
 <YYINITIAL> "when"              { return makeToken(SymbolType.WHEN); }
 <YYINITIAL> "is"                { return makeToken(SymbolType.IS); }
+<YYINITIAL> "in"                { return makeToken(SymbolType.IN); }
 <YYINITIAL> "use"               { return makeToken(SymbolType.USE); }
 <YYINITIAL> "mod"               { return makeToken(SymbolType.MOD); }
 
@@ -152,7 +136,8 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
 
     /* literals */
     {DecIntegerLiteral}            { return makeToken(SymbolType.INTEGER_LITERAL, yytext()); }
-    \" | '                         { string.setLength(0); yybegin(STRING); }
+    \"                             { string.setLength(0); yybegin(STRING); }
+    '                              { string.setLength(0); yybegin(SINGLE_STRING); }
 
     /* operators */
     "=="                           { return makeToken(SymbolType.EQ); }
@@ -188,17 +173,31 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
 }
 
 <STRING> {
-      \" | '                         { yybegin(YYINITIAL); return makeToken(SymbolType.STRING_LITERAL, string.toString()); }
-      [^\n\r[\"|\']\\]+              { string.append( yytext() ); }
+      \"                             { yybegin(YYINITIAL); return makeToken(SymbolType.STRING_LITERAL, string.toString()); }
+      [^\n\r\"\\]+                   { string.append( yytext() ); }
       \\t                            { string.append('\t'); }
       \\n                            { string.append('\n'); }
 
       \\r                            { string.append('\r'); }
       \\\"                           { string.append('\"'); }
+      \\                             { string.append('\\'); }
+      <<EOF>>                        { raiseEx(new ParsingError("unexpected EOF in middle of a string literal",
+                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file, yytext(),
+                                        getLine(), getLine(), getColumn(), getColumn())); }
+}
+
+<SINGLE_STRING> {
+      '                              { yybegin(YYINITIAL); return makeToken(SymbolType.STRING_LITERAL, string.toString()); }
+      [^\n\r\'\\]+                   { string.append( yytext() ); }
+      \\t                            { string.append('\t'); }
+      \\n                            { string.append('\n'); }
+
+      \\r                            { string.append('\r'); }
       \\\'                           { string.append('\''); }
       \\                             { string.append('\\'); }
-      <<EOF>>                        { throw new ParsingError("unexpected EOF in middle of a string literal",
-                                        this.file, yytext(), getLine(), getColumn()); }
+      <<EOF>>                        { raiseEx(new ParsingError("unexpected EOF in middle of a string literal",
+                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file, yytext(),
+                                        getLine(), getLine(), getColumn(), getColumn())); }
 }
 
 [^]                              { throw new ParsingError(this.file, yytext(), getLine(), getColumn()); }
