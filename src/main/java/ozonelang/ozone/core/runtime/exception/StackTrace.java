@@ -17,10 +17,9 @@ public class StackTrace {
         codePoints.addAll(Arrays.asList(contexts));
         outStream = out;
     }
-    public StackTrace(PrintStream output, Context context, Context... contexts) {
+    public StackTrace(PrintStream output, Context... contexts) {
         outStream = output;
         codePoints.addAll(Arrays.asList(contexts));
-        codePoints.add(context);
     }
     public List<Context> getLocations() {
         return Collections.unmodifiableList(codePoints);
