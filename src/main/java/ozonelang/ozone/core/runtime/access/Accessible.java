@@ -32,40 +32,43 @@
  * along with Ozone.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ozonelang.ozone.core.runtime.type;
+package ozonelang.ozone.core.runtime.access;
 
-import java.io.Serializable;
+import ozonelang.ozone.core.lexer.Context;
+import ozonelang.ozone.core.runtime.type.OzObject;
+import ozonelang.ozone.core.runtime.type.OzString;
 
-public class OzString extends OzObject implements Serializable {
-    private static final long serialVersionUID = 7645000375801965956L;
+public interface Accessible {
+    /**
+     * Return a property of an object accessed with a getter/setter.
+     *
+     * Example of ozone code that'll invoke this:
+     * {@code
+     *  $d = MyVariable.length;
+     * }
+     *
+     * @param propertyName the name of the property to be accessed,
+     * {@code length} in the above example
+     * @param contexts the contexts this property call appears in.
+     * @param <T> The return type of the property
+     * @return The property
+     */
+    <T extends OzObject> T getProperty(OzString propertyName, Context... contexts);
 
-    private String value;
-
-    OzString(String s) {
-        value = s;
-    }
-
-    @Override
-    public OzString genericName() {
-        return new OzString("string");
-    }
-
-    @Override
-    public String repr() {
-        return value;
-    }
-
-    public void setValue(String s) {
-        value = s;
-    }
-
-    public static OzString fromString(String... s) {
-        if (s.length == 0)
-            return new OzString(s[0]);
-        return new OzString(String.join(" ", s));
-    }
-
-    public static OzString fromString(char delim, String... s) {
-        return new OzString(String.join(Character.toString(delim), s));
-    }
+    /**
+     * Set a property of an object.
+     *
+     * Example of ozone code that'll invoke this:
+     *
+     * {@code
+     *  MyObject.MyWritableProp = 0;
+     * }
+     * {@code
+     *  MyObject.MyReadonlyProp = 0; // error
+     * }
+     *
+     * @param value the new value for the property
+     * @param <T> the type of the value
+     */
+    <T extends OzObject> void setProperty(T value);
 }

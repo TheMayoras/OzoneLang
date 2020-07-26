@@ -15,24 +15,9 @@
  * along with Ozone.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ozonelang.ozone.core.runtime.type;
+package ozonelang.ozone.core.runtime.exception;
 
-//import org.apache.commons.lang3.SerializationUtils;
-
-import java.io.Serializable;
-
-public class OzObject implements Serializable {
-    private static final long serialVersionUID = 7932392952560561002L;
-
-    public OzString genericName() {
-        return OzString.fromString("obj");
-    }
-
-    /*public OzObject dup() {
-        return SerializationUtils.clone(this);
-    }*/
-
-    public String repr() {
-        return "<" + genericName() + "#0x" + Integer.toHexString(hashCode()) + ">";
-    }
+public interface ErrorConstants {
+    String ARITHMETHIC_E = "ArithmeticError";
+    String CLASSLOADER_E = "ClassLoaderError";
 }

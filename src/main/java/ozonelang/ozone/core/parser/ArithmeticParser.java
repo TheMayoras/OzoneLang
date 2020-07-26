@@ -1,35 +1,25 @@
+/*
+ * This file is part of Ozone.
+ *
+ * Ozone is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Ozone is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Ozone.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ozonelang.ozone.core.parser;
 
 import ozonelang.ozone.core.lexer.SymbolType;
 import ozonelang.ozone.core.lexer.TokenStream;
 
 public class ArithmeticParser {
-    public static double eval(final TokenStream stream) {
-        return new Object() {
-            double parseExpression() {
-                double x;
-                var num1 = Double.parseDouble(stream.accept(SymbolType.FLOAT_LITERAL).getToken());
-                var op = stream.accept("+", "-", "*", "/", "%", "^").getToken();
-                var num2 = Double.parseDouble(stream.accept(SymbolType.FLOAT_LITERAL, SymbolType.INTEGER_LITERAL).getToken());
-                switch (op) {
-                    case "+":
-                        x = num1 + num2;
-                    case "-":
-                        x = num1 - num2;
-                    case "*":
-                        x = num1 * num2;
-                    case "/":
-                        x = num1 / num2;
-                    case "%":
-                        x = num1 % num2;
-                    case "^":
-                        x = Math.pow(num1, num2);
-                        break;
-                    default:
-                        x = 0;
-                }
-                return x;
-            }
-        }.hashCode();
-    }
+
 }
