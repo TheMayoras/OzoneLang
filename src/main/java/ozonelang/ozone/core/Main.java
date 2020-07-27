@@ -17,6 +17,7 @@
 
 package ozonelang.ozone.core;
 
+import ozonelang.ozone.core.lexer.Lexer;
 import ozonelang.ozone.core.lexer.TokenStream;
 
 import java.io.IOException;
