@@ -17,7 +17,6 @@
 
 package ozonelang.ozone.core.parser;
 
-import ozonelang.ozone.core.lexer.Lexer;
 import ozonelang.ozone.core.lexer.SymbolType;
 import ozonelang.ozone.core.lexer.TokenStream;
 
