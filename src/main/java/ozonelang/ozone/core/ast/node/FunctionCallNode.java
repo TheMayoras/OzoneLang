@@ -17,35 +17,43 @@
 
 package ozonelang.ozone.core.ast.node;
 
+import ozonelang.ozone.core.ast.fragment.FormalArgsList;
+import ozonelang.ozone.core.lexer.Context;
 import ozonelang.ozone.core.runtime.type.OzObject;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static java.util.Map.Entry;
+public final class FunctionCallNode extends CodeNode {
+    private final FormalArgsList argsList;
+    private final String name;
 
-public class FunctionCallNode {
-    public static class FormalArgsList {
-        private final List<OzObject> args;
-        private final Map<String, OzObject> kwargs;
+    public FunctionCallNode(String name, FormalArgsList argsList, CodeNode parent, Context... contexts) {
+        super(parent, contexts);
+        this.argsList = argsList;
+        this.name = name;
+    }
 
-        @SafeVarargs
-        public FormalArgsList(List<OzObject> args, Entry<String, OzObject>... kwargs) {
-            this.args = args;
-            this.kwargs = new HashMap<>();
-            for (var kwarg : kwargs) {
-                this.kwargs.put(kwarg.getKey(), kwarg.getValue());
-            }
-        }
+    public FunctionCallNode(String name, CodeNode parent, List<Context> contexts, OzObject... args) {
+        super(parent, contexts.toArray(new Context[0]));
+        this.name = name;
+        argsList = new FormalArgsList(args);
+    }
 
-        public Collection<OzObject> getArgs() {
-            return args;
-        }
+    public String getName() {
+        return name;
+    }
 
-        public Map<String, OzObject> getKwargs() {
-            return kwargs;
-        }
+    public FormalArgsList getArgsList() {
+        return argsList;
+    }
+
+    @Override
+    public List<CodeNode> getChildren() {
+        return null;
+    }
+
+    @Override
+    public boolean hasReturnValue() {
+        return true;
     }
 }

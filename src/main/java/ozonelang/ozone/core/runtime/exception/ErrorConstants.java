@@ -18,6 +18,7 @@
 package ozonelang.ozone.core.runtime.exception;
 
 public interface ErrorConstants {
-    String ARITHMETHIC_E = "ArithmeticError";
-    String CLASSLOADER_E = "ClassLoaderError";
+    String ARITHMETHIC_E        = "ArithmeticError";
+    String CLASSLOADER_E        = "ClassLoaderError";
+    String VALUE_EXPECTED_E     = "ValueExpectedError";
 }

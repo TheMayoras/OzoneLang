@@ -30,7 +30,7 @@ public class OzString extends OzObject implements Serializable {
 
     @Override
     public OzString genericName() {
-        return new OzString("string");
+        return new OzString("String");
     }
 
     @Override
@@ -40,6 +40,10 @@ public class OzString extends OzObject implements Serializable {
 
     public void setValue(String s) {
         value = s;
+    }
+
+    public String getValue() {
+        return value;
     }
 
     public static OzString fromString(String... s) {

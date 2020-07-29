@@ -17,22 +17,35 @@
 
 package ozonelang.ozone.core.runtime.type;
 
-//import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.SerializationUtils;
+import ozonelang.ozone.core.lexer.Context;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
 
 public class OzObject implements Serializable {
     private static final long serialVersionUID = 7932392952560561002L;
 
-    public OzString genericName() {
-        return OzString.fromString("obj");
+    protected final Context[] contexts;
+
+    protected Collection<Context> getContexts() {
+        return Arrays.asList(contexts);
     }
 
-    /*public OzObject dup() {
+    public OzObject(Context... contexts) {
+        this.contexts = contexts;
+    }
+
+    public OzString genericName() {
+        return OzString.fromString("object");
+    }
+
+    public OzObject dup() {
         return SerializationUtils.clone(this);
-    }*/
+    }
 
     public String repr() {
-        return "<" + genericName() + "#0x" + Integer.toHexString(hashCode()) + ">";
+        return "<" + genericName() + "#0x" + Integer.toHexString(System.identityHashCode(this)) + ">";
     }
 }

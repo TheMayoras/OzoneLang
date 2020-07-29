@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
+
 /**
  * A base class representing a statement
  * or block in source code.
@@ -34,10 +36,17 @@ public abstract class CodeNode {
     public abstract List<CodeNode> getChildren();
 
     /**
+     * The parent of this CodeNode
+     */
+    protected CodeNode parent;
+
+    /**
      * Returns the parent node of this CodeNode.
      * Every CodeNode has a parent, except for {@link RootNode}
      */
-    public abstract CodeNode getParent();
+    public CodeNode getParent() {
+        return parent;
+    }
 
     /**
      * Whether this CodeNode is a value expression or not
@@ -74,7 +83,10 @@ public abstract class CodeNode {
      * @param contexts The {@link Context} objects
      * this CodeNode is related to
      */
-    public CodeNode(Context... contexts) {
+    public CodeNode(CodeNode parent, Context... contexts) {
+        this.parent = parent;
+        if (contexts.length < 1)
+            raiseEx(new RuntimeException(String.format("internal error at file %s", getClass().getName().replace(".", "/"))), true, contexts);
         this.contexts.addAll(Arrays.asList(contexts));
     }
 }
