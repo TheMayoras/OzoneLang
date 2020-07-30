@@ -42,7 +42,7 @@ public abstract class CodeNode {
 
     /**
      * Returns the parent node of this CodeNode.
-     * Every CodeNode has a parent, except for {@link RootNode}
+     * Every CodeNode has a parent, except for RootNode
      */
     public CodeNode getParent() {
         return parent;
@@ -63,7 +63,14 @@ public abstract class CodeNode {
      * @return The contexts of this CodeNode
      */
     public List<Context> getContexts() {
-        return contexts;
+        var l = new ArrayList<Context>();
+        l.addAll(contexts);
+        l.addAll(getParent().getContexts());
+        return l;
+    }
+
+    public Context[] getContextsArr() {
+        return getContexts().toArray(new Context[0]);
     }
 
     @Override

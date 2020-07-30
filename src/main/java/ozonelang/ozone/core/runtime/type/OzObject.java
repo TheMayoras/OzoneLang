@@ -45,7 +45,7 @@ public class OzObject implements Serializable {
         return SerializationUtils.clone(this);
     }
 
-    public String repr() {
-        return "<" + genericName() + "#0x" + Integer.toHexString(System.identityHashCode(this)) + ">";
+    public OzString repr() {
+        return OzString.fromString("<" + genericName() + "#0x" + Integer.toHexString(System.identityHashCode(this)) + ">");
     }
 }

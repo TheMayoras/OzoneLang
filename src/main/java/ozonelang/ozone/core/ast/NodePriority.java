@@ -15,11 +15,20 @@
  * along with Ozone.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ozonelang.ozone.core.runtime.exception;
+package ozonelang.ozone.core.ast;
 
-public interface ErrorConstants {
-    String ARITHMETHIC_E        = "ArithmeticError";
-    String CLASSLOADER_E        = "ClassLoaderError";
-    String VALUE_EXPECTED_E     = "ValueExpectedError";
-    String TYPE_MISMATCH_E      = "TypeMismatchError";
+/**
+ * Indicates the priority of evaluating an {@link ozonelang.ozone.core.ast.node.ExpressionNode}.
+ */
+public enum NodePriority {
+    /** POW symbol ( ^ ) */
+    HIGHEST,
+    /** Parentheses */
+    HIGH,
+    /** Division and multiplication */
+    NORMAL,
+    /** Addition and subtraction,
+     * also includes "..", "..." and "&" for strings.
+     */
+    LOW,
 }

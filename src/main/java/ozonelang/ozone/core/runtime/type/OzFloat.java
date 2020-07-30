@@ -19,43 +19,20 @@ package ozonelang.ozone.core.runtime.type;
 
 import ozonelang.ozone.core.lexer.Context;
 
-import java.io.Serializable;
+public class OzFloat extends OzObject {
+    private double value;
 
-public class OzString extends OzObject implements Serializable {
-    private static final long serialVersionUID = 7645000375801965956L;
-
-    private String value;
-
-    public OzString(String s, Context... contexts) {
+    public OzFloat(double value, Context... contexts) {
         super(contexts);
-        value = s;
     }
 
     @Override
     public OzString genericName() {
-        return new OzString("String");
+        return OzString.fromString("float");
     }
 
     @Override
     public OzString repr() {
-        return fromString(value);
-    }
-
-    public void setValue(String s) {
-        value = s;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public static OzString fromString(String... s) {
-        if (s.length == 1)
-            return new OzString(s[0]);
-        return new OzString(String.join(" ", s));
-    }
-
-    public static OzString fromString(char delim, String... s) {
-        return new OzString(String.join(Character.toString(delim), s));
+        return OzString.fromString(String.valueOf(this.value));
     }
 }

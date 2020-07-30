@@ -17,6 +17,10 @@
 
 package ozonelang.ozone.core.lexer;
 
+import ozonelang.ozone.core.runtime.exception.OzoneException;
+
+import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
+
 public enum SymbolType {
     ASSIGN,
     AT,
@@ -63,5 +67,25 @@ public enum SymbolType {
     USE,
     VAR,
     WHEN,
-    YES,
+    YES;
+
+    public static String typename(SymbolType s) {
+        switch (s) {
+            case INTEGER_LITERAL:
+                return "integer";
+            case SHORT_LITERAL:
+                return "short";
+            case FLOAT_LITERAL:
+                return "float";
+            case LONG_LITERAL:
+                return "long";
+            case YES:
+            case NO:
+                return "bool";
+            case STRING_LITERAL:
+                return "string";
+            default:
+                return null;
+        }
+    }
 }

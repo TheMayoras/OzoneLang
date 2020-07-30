@@ -39,8 +39,8 @@ public class OzNothing extends OzObject implements Serializable {
     }
 
     @Override
-    public String repr() {
-        return genericName().getValue();
+    public OzString repr() {
+        return genericName();
     }
 
     public static boolean ensureNonNull(OzObject candidate) {
