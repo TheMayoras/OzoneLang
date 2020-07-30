@@ -34,6 +34,15 @@ public class Context {
         this.endCol = endCol;
     }
 
+    public Context(String file, String source, long line, long col) {
+        this.source = source;
+        this.file = file;
+        this.endLine = line;
+        this.startLine = line;
+        this.startCol = col;
+        this.endCol = col;
+    }
+
     public Context(Token t, Token t2) {
         this.source = t.getToken() + "\n" + t2.getToken();
         this.file = (t.getFile().equals(t2.getFile()) ? t.getFile() : String.format("'%s' and '%s'", t.getFile(), t2.getFile()));

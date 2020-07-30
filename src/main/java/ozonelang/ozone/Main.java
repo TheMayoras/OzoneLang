@@ -15,7 +15,7 @@
  * along with Ozone.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ozonelang.ozone.core;
+package ozonelang.ozone;
 
 import ozonelang.ozone.core.lexer.Lexer;
 import ozonelang.ozone.core.lexer.TokenStream;
