@@ -45,7 +45,7 @@
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>ozonelang.ozone.core.Main</mainClass>
+                            <mainClass>ozonelang.ozone.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

@@ -201,7 +201,9 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
       \\                             { string.append('\\'); yycolumn++; }
       <<EOF>>                        { raiseEx(new ParsingError("unexpected EOF in middle of a string literal",
                                         this.file, yytext(), getLine(), getColumn()), true, new Context(file, yytext(),
-                                        getLine(), getLine(), getColumn(), getColumn())); }
+                                        getLine(), getColumn())); }
 }
 
-[^]                              { throw new ParsingError(this.file, yytext(), getLine(), getColumn()); }
+[^]                                  { raiseEx(new ParsingError(String.format("unexpected character: '%s'", yytext()),
+                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file, yytext(),
+                                        getLine(), getColumn())); }

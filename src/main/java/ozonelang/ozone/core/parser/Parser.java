@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public final class Parser {
+
     private final TokenStream stream;
     private final Lexer lexer;
     public static final String EOF = "<EOF>";
