@@ -19,22 +19,32 @@ package ozonelang.ozone.core.runtime.type;
 
 import org.apache.commons.lang3.SerializationUtils;
 import ozonelang.ozone.core.lexer.Context;
+import ozonelang.ozone.core.runtime.access.Accessible;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-public class OzObject implements Serializable {
+public class OzObject implements Serializable, Accessible {
     private static final long serialVersionUID = 7932392952560561002L;
-
+    private Object value;
+    protected final Map<String, OzObject> defaultProperties;
     protected final Context[] contexts;
-
     protected Collection<Context> getContexts() {
         return Arrays.asList(contexts);
     }
 
-    public OzObject(Context... contexts) {
+    public OzObject(Object value, Context... contexts) {
         this.contexts = contexts;
+        this.value = value;
+        var initProps = new HashMap<String, OzObject>();
+        initProps.put("AsString", repr());
+        initProps.put("HashCode", OzString.fromString(Integer.toHexString(System.identityHashCode(this))));
+        initProps.put("BinaryHash", OzString.fromString(Integer.toBinaryString(System.identityHashCode(this))));
+        defaultProperties = Collections.unmodifiableMap(initProps);
     }
 
     public OzString genericName() {
@@ -47,5 +57,19 @@ public class OzObject implements Serializable {
 
     public OzString repr() {
         return OzString.fromString("<" + genericName() + "#0x" + Integer.toHexString(System.identityHashCode(this)) + ">");
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    @Override
+    public <T extends OzObject> T getProperty(OzString propertyName, Context... contexts) {
+        return null;
+    }
+
+    @Override
+    public <T extends OzObject> void setProperty(T value) {
+
     }
 }

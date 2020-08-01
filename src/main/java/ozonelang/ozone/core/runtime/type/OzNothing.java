@@ -30,7 +30,7 @@ public class OzNothing extends OzObject implements Serializable {
     private static final long serialVersionUID = 1030778380038760396L;
 
     public OzNothing(Context... contexts) {
-        super(contexts);
+        super(null, contexts);
     }
 
     @Override
@@ -63,5 +63,10 @@ public class OzNothing extends OzObject implements Serializable {
             );
         }
         return true;
+    }
+
+    @Override
+    public Object getValue() {
+        return null;
     }
 }

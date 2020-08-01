@@ -19,26 +19,25 @@ package ozonelang.ozone.core.runtime.type;
 
 import ozonelang.ozone.core.lexer.Context;
 
-public class OzShort extends OzObject {
-    private short value;
+public class OzByte extends OzObject {
+    private byte value;
 
-    public OzShort(short value, Context... contexts) {
+    public OzByte(byte value, Context... contexts) {
         super(value, contexts);
-        this.value = value;
     }
 
     @Override
     public OzString genericName() {
-        return OzString.fromString("short");
+        return OzString.fromString("byte");
     }
 
     @Override
     public OzString repr() {
-        return OzString.fromString(String.valueOf(this.value));
+        return OzString.fromString("0x" + Integer.toHexString(value));
     }
 
     @Override
-    public Short getValue() {
+    public Byte getValue() {
         return value;
     }
 }

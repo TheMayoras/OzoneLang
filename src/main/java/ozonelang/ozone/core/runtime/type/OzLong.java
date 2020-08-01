@@ -23,7 +23,7 @@ public class OzLong extends OzObject {
     private long value;
 
     public OzLong(long value, Context... contexts) {
-        super(contexts);
+        super(value, contexts);
         this.value = value;
     }
 
@@ -35,5 +35,10 @@ public class OzLong extends OzObject {
     @Override
     public OzString repr() {
         return OzString.fromString(String.valueOf(this.value));
+    }
+
+    @Override
+    public Long getValue() {
+        return value;
     }
 }

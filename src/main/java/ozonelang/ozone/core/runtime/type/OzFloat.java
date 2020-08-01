@@ -23,7 +23,7 @@ public class OzFloat extends OzObject {
     private double value;
 
     public OzFloat(double value, Context... contexts) {
-        super(contexts);
+        super(value, contexts);
     }
 
     @Override
@@ -34,5 +34,10 @@ public class OzFloat extends OzObject {
     @Override
     public OzString repr() {
         return OzString.fromString(String.valueOf(this.value));
+    }
+
+    @Override
+    public Double getValue() {
+        return value;
     }
 }

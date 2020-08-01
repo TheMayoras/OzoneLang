@@ -25,22 +25,15 @@ import java.util.List;
 
 public final class FunctionCallNode extends CodeNode {
     private final FormalArgsList argsList;
-    private final String name;
 
-    public FunctionCallNode(String name, FormalArgsList argsList, CodeNode parent, Context... contexts) {
+    public FunctionCallNode(FormalArgsList argsList, CodeNode parent, Context... contexts) {
         super(parent, contexts);
         this.argsList = argsList;
-        this.name = name;
     }
 
-    public FunctionCallNode(String name, CodeNode parent, List<Context> contexts, OzObject... args) {
+    public FunctionCallNode(CodeNode parent, List<Context> contexts, OzObject... args) {
         super(parent, contexts.toArray(new Context[0]));
-        this.name = name;
         argsList = new FormalArgsList(args);
-    }
-
-    public String getName() {
-        return name;
     }
 
     public FormalArgsList getArgsList() {

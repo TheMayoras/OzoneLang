@@ -27,13 +27,13 @@ public class OzString extends OzObject implements Serializable {
     private String value;
 
     public OzString(String s, Context... contexts) {
-        super(contexts);
+        super(s, contexts);
         value = s;
     }
 
     @Override
     public OzString genericName() {
-        return new OzString("String");
+        return new OzString("string");
     }
 
     @Override

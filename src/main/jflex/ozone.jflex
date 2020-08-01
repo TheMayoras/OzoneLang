@@ -33,6 +33,7 @@ import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
 %apiprivate
 %type Token
 %ctorarg String file
+%ctorarg boolean doc
 %init{
     this.file = file;
 %init}
@@ -111,6 +112,7 @@ ShortLiteral = {DecIntegerLiteral} + ( "s" | "S" )
 Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
 %state STRING
 %state SINGLE_STRING
+%state TEMPLATE_STRING
 %%
 /* keywords */
 <YYINITIAL> "func"              { return makeToken(SymbolType.FUNC); }
@@ -141,6 +143,7 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
     {DecIntegerLiteral}            { return makeToken(SymbolType.INTEGER_LITERAL, yytext()); }
     \"                             { string.setLength(0); stringStart = yycolumn; yybegin(STRING); }
     '                              { string.setLength(0); yybegin(SINGLE_STRING); }
+    `                              { string.setLength(0); yybegin(TEMPLATE_STRING); }
 
     /* operators */
     "=="                           { return makeToken(SymbolType.EQ); }
@@ -170,7 +173,7 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
 
     /* comments */
     {Comment}                      { /* ignore safely */ }
-    {DocumentationComment}         { return makeToken(SymbolType.DOC_COMMENT, yytext()); }
+    {DocumentationComment}         { if (doc) return makeToken(SymbolType.DOC_COMMENT, yytext()); }
 
     /* whitespace */
     {WhiteSpace}                   { /* ignore */ }
@@ -202,6 +205,21 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
       <<EOF>>                        { raiseEx(new ParsingError("unexpected EOF in middle of a string literal",
                                         this.file, yytext(), getLine(), getColumn()), true, new Context(file, yytext(),
                                         getLine(), getColumn())); }
+}
+
+<TEMPLATE_STRING> {
+      `                              { yybegin(YYINITIAL); return makeToken(SymbolType.TEMPLATE_STRING, string.toString()); }
+      [^\n\r\`\\]+                   { string.append( yytext() ); yycolumn += yytext().length(); }
+      \\t                            { string.append('\t'); yycolumn++; }
+      \\n                            { string.append('\n'); yyline++; yycolumn = 0;}
+
+      \\r                            { string.append('\r'); yycolumn = 0; }
+      \\\`                           { string.append('`'); yycolumn++; }
+      \\                             { string.append('\\'); yycolumn++; }
+      <<EOF>>                        { raiseEx(new ParsingError("unexpected EOF in middle of a string literal",
+                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file, yytext(),
+                                        getLine(), getColumn())); }
+
 }
 
 [^]                                  { raiseEx(new ParsingError(String.format("unexpected character: '%s'", yytext()),

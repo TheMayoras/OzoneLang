@@ -63,9 +63,9 @@ public abstract class CodeNode {
      * @return The contexts of this CodeNode
      */
     public List<Context> getContexts() {
-        var l = new ArrayList<Context>();
-        l.addAll(contexts);
-        l.addAll(getParent().getContexts());
+        var l = new ArrayList<Context>(contexts);
+        if (getParent().getContexts() != null)
+            l.addAll(getParent().getContexts());
         return l;
     }
 
@@ -83,7 +83,6 @@ public abstract class CodeNode {
                              contexts.get(1).getEndCol()
         );
     }
-
     /**
      * Creates a new instance of CodeNode
      *

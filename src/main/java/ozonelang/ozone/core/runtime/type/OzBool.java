@@ -19,26 +19,25 @@ package ozonelang.ozone.core.runtime.type;
 
 import ozonelang.ozone.core.lexer.Context;
 
-public class OzShort extends OzObject {
-    private short value;
+public class OzBool extends OzObject {
+    private boolean value;
 
-    public OzShort(short value, Context... contexts) {
+    public OzBool(boolean value, Context... contexts) {
         super(value, contexts);
-        this.value = value;
     }
 
     @Override
     public OzString genericName() {
-        return OzString.fromString("short");
+        return OzString.fromString("bool");
     }
 
     @Override
     public OzString repr() {
-        return OzString.fromString(String.valueOf(this.value));
+        return value ? OzString.fromString("yes") : OzString.fromString("no");
     }
 
     @Override
-    public Short getValue() {
+    public Boolean getValue() {
         return value;
     }
 }

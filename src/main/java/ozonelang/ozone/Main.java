@@ -30,7 +30,7 @@ public class Main {
         Scanner s = new Scanner(System.in);
         while (true) {
             System.out.print(">>> ");
-            ts = TokenStream.open(new Lexer(new StringReader(s.nextLine()), "<stdin>"));
+            ts = TokenStream.open(new Lexer(new StringReader(s.nextLine()), "<stdin>", false));
             while (ts.hasNext()) {
                 System.out.println(ts.seek());
                 ts.advance();
