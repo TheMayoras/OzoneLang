@@ -17,9 +17,6 @@
 
 package ozonelang.ozone.core.ast;
 
-/**
- * Indicates the priority of evaluating an {@link ozonelang.ozone.core.ast.node.ExpressionNode}.
- */
 public enum NodePriority {
     /** POW symbol ( ^ ) */
     HIGHEST,
@@ -31,4 +28,8 @@ public enum NodePriority {
      * also includes "..", "..." and "&" for strings.
      */
     LOW,
+    /**
+     * Boolean operations.
+     */
+    LOWEST,
 }

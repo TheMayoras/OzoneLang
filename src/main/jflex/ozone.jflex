@@ -19,6 +19,7 @@ package ozonelang.ozone.core.lexer;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.IOException;
+import java.io.Reader;
 
 import ozonelang.ozone.core.runtime.exception.OzoneException;
 import ozonelang.ozone.core.runtime.exception.StackTrace;
@@ -36,9 +37,15 @@ import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
 %ctorarg boolean doc
 %init{
     this.file = file;
+    this.doc = doc;
 %init}
 %{
     public final String file;
+    public final boolean doc;
+
+    public Lexer(Reader in, String filename) {
+        this(in, filename, false);
+    }
 
     StringBuilder string = new StringBuilder();
 
@@ -106,6 +113,8 @@ CommentContent       = ( [^*] | \*+ [^/*] )*
 
 Boolean = "yes" | "no" | "nothing"
 DecIntegerLiteral = 0 | [1-9][0-9]*
+ByteBody = [0-9A-Fa-f]{1,8}
+ByteLiteral = "0x"{ByteBody}
 FloatLiteral = {DecIntegerLiteral}? + "." + {DecIntegerLiteral}
 LongLiteral = {DecIntegerLiteral} + ( "l" | "L" )
 ShortLiteral = {DecIntegerLiteral} + ( "s" | "S" )
@@ -140,6 +149,7 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
     {Identifier}                   { return makeToken(SymbolType.IDENTIFIER, yytext()); }
 
     /* literals */
+    {ByteLiteral}                  { return makeToken(SymbolType.BYTE_LITERAL, yytext().replace("0x", "")); }
     {DecIntegerLiteral}            { return makeToken(SymbolType.INTEGER_LITERAL, yytext()); }
     \"                             { string.setLength(0); stringStart = yycolumn; yybegin(STRING); }
     '                              { string.setLength(0); yybegin(SINGLE_STRING); }
@@ -169,6 +179,7 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
     "["                            { return makeToken(SymbolType.SQ_BRACET_L); }
     "}"                            { return makeToken(SymbolType.RBRACE); }
     "{"                            { return makeToken(SymbolType.LBRACE); }
+    ","                            { return makeToken(SymbolType.COMMA); }
 
 
     /* comments */
