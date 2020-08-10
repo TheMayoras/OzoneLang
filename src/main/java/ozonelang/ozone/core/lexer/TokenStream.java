@@ -22,11 +22,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
 import static ozonelang.ozone.core.lexer.ParsingError.expected;
 
-public class TokenStream {
+public class TokenStream implements Iterable<Token> {
     private Lexer lexer;
     private List<Token> tokens;
     private int idx;
@@ -238,5 +244,23 @@ public class TokenStream {
     @Override
     public String toString() {
         return tokens.toString();
+    }
+
+    @Override
+    public Iterator<Token> iterator() {
+        return tokens.iterator();
+    }
+
+    @Override
+    public void forEach(Consumer<? super Token> action) {
+        Objects.requireNonNull(action);
+        for (Token t : this) {
+            action.accept(t);
+        }
+    }
+
+    @Override
+    public Spliterator<Token> spliterator() {
+        return tokens.spliterator();
     }
 }

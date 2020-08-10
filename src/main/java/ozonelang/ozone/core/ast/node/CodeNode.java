@@ -22,6 +22,7 @@ import ozonelang.ozone.core.lexer.Context;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
 
@@ -42,7 +43,7 @@ public abstract class CodeNode {
 
     /**
      * Returns the parent node of this CodeNode.
-     * Every CodeNode has a parent, except for RootNode
+     * Every CodeNode has a parent, except for {@link RootNode}
      */
     public CodeNode getParent() {
         return parent;
@@ -64,12 +65,11 @@ public abstract class CodeNode {
      */
     public List<Context> getContexts() {
         var l = new ArrayList<Context>(contexts);
-        if (getParent().getContexts() != null)
-            l.addAll(getParent().getContexts());
+        l.addAll(Objects.requireNonNullElse(getParent().getContexts(), new ArrayList<>()));
         return l;
     }
 
-    public Context[] getContextsArr() {
+    protected Context[] getContexts_() {
         return getContexts().toArray(new Context[0]);
     }
 
