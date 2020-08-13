@@ -200,7 +200,7 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
       \\\"                           { string.append('\"'); yycolumn++; }
       \\                             { string.append('\\'); yycolumn++; }
       <<EOF>>                        { raiseEx(new ParsingError("unexpected EOF in middle of a string literal",
-                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file, yytext(),
+                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file,
                                         getLine(), getLine(), getColumn(), getColumn())); }
 }
 
@@ -214,7 +214,7 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
       \\\'                           { string.append('\''); yycolumn++; }
       \\                             { string.append('\\'); yycolumn++; }
       <<EOF>>                        { raiseEx(new ParsingError("unexpected EOF in middle of a string literal",
-                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file, yytext(),
+                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file,
                                         getLine(), getColumn())); }
 }
 
@@ -228,11 +228,11 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
       \\\`                           { string.append('`'); yycolumn++; }
       \\                             { string.append('\\'); yycolumn++; }
       <<EOF>>                        { raiseEx(new ParsingError("unexpected EOF in middle of a string literal",
-                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file, yytext(),
+                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file,
                                         getLine(), getColumn())); }
 
 }
 
 [^]                                  { raiseEx(new ParsingError(String.format("unexpected character: '%s'", yytext()),
-                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file, yytext(),
+                                        this.file, yytext(), getLine(), getColumn()), true, new Context(file,
                                         getLine(), getColumn())); }

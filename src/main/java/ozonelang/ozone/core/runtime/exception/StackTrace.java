@@ -28,7 +28,7 @@ import java.util.List;
 import static java.lang.System.out;
 
 public class StackTrace {
-    private List<Context> codePoints = new ArrayList<>();
+    private final List<Context> codePoints = new ArrayList<>();
     private final PrintStream outStream;
     public StackTrace(Context... contexts) {
         codePoints.addAll(Arrays.asList(contexts));

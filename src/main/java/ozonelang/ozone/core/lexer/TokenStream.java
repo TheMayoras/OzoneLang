@@ -198,6 +198,15 @@ public class TokenStream implements Iterable<Token> {
     }
 
     /**
+     * Returns the current token in the stream as a string.
+     *
+     * @return The current token in the stream as a string.
+     */
+    public String seekString() {
+        return tokens.get(idx).getToken();
+    }
+
+    /**
      * Returns the lexer used by this instance of TokenStream.
      *
      * @return The lexer used by this TokenStream

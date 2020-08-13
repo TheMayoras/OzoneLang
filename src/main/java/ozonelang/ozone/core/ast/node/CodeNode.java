@@ -18,6 +18,7 @@
 package ozonelang.ozone.core.ast.node;
 
 import ozonelang.ozone.core.lexer.Context;
+import ozonelang.ozone.core.runtime.exception.StackTrace;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,12 +65,12 @@ public abstract class CodeNode {
      * @return The contexts of this CodeNode
      */
     public List<Context> getContexts() {
-        var l = new ArrayList<Context>(contexts);
+        var l = new ArrayList<>(contexts);
         l.addAll(Objects.requireNonNullElse(getParent().getContexts(), new ArrayList<>()));
         return l;
     }
 
-    protected Context[] getContexts_() {
+    protected Context[] _getContexts() {
         return getContexts().toArray(new Context[0]);
     }
 
@@ -92,7 +93,11 @@ public abstract class CodeNode {
     public CodeNode(CodeNode parent, Context... contexts) {
         this.parent = parent;
         if (contexts.length < 1)
-            raiseEx(new RuntimeException(String.format("internal error at file %s", getClass().getName().replace(".", "/"))), true, contexts);
+            raiseEx(new RuntimeException(String.format("WARNING: internal error at file '%s.java'", getClass().getName().replace(".", "/"))), true, contexts);
         this.contexts.addAll(Arrays.asList(contexts));
+    }
+
+    public StackTrace getStackTrace() {
+        return new StackTrace(_getContexts());
     }
 }

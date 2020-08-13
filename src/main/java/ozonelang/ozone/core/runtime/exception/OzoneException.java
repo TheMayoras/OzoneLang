@@ -74,23 +74,28 @@ public class OzoneException {
     public static void raiseEx(OzoneException ex) {
         var stream = ex.trace.getOutputStream();
         var locs = ex.trace.getLocations();
-        stream.printf(
-                "[%s occurred at file '%s', line %s, column %s]\n[Message: '%s']\n",
-                ex.name,
-                locs.get(0).getFile(),
-                locs.get(0).getStartLine(),
-                locs.get(0).getStartCol(),
-                ex.getMessage()
-        );
+        if (locs.size() > 0)
+            stream.printf(
+                    "[%s occurred at file '%s', line %s, column %s]\n[Message: %s]\n",
+                    ex.name,
+                    locs.get(0).getFile(),
+                    locs.get(0).getStartLine(),
+                    locs.get(0).getStartCol(),
+                    ex.getMessage()
+            );
+        else
+            stream.printf(
+                    "[%s occurred at file '<unknown>', line <unknown>, column <unknown>]\n[Message: %s]\n",
+                    ex.name,
+                    ex.getMessage()
+            );
         ex.trace.printTrace();
         if (ex.isFatal()) {
             exit(1);
         }
     }
     public static void raiseEx(Throwable nested, boolean fatal, Context... contexts) {
-        var trace = new StackTrace(contexts[0]);
-        for (var i = 1; i < contexts.length; i++)
-            trace.addContext(contexts[i]);
+        var trace = new StackTrace(contexts);
         var ex = new OzoneException(nested, fatal, contexts);
         raiseEx(ex);
     }

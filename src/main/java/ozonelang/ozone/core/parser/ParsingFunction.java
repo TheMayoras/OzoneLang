@@ -17,6 +17,10 @@
 
 package ozonelang.ozone.core.parser;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+
+@Target({ElementType.METHOD})
 public @interface ParsingFunction {
     public String parent() default "";
     public String expression() default "";

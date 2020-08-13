@@ -18,15 +18,13 @@
 package ozonelang.ozone.core.lexer;
 
 public class Context {
-    private String source;
     private String file;
     private long startLine;
     private long endLine;
     private long startCol;
     private long endCol;
 
-    public Context(String file, String source, long startLine, long endLine, long startCol, long endCol) {
-        this.source = source;
+    public Context(String file, long startLine, long endLine, long startCol, long endCol) {
         this.file = file;
         this.endLine = endLine;
         this.startLine = startLine;
@@ -34,8 +32,7 @@ public class Context {
         this.endCol = endCol;
     }
 
-    public Context(String file, String source, long line, long col) {
-        this.source = source;
+    public Context(String file, long line, long col) {
         this.file = file;
         this.endLine = line;
         this.startLine = line;
@@ -44,20 +41,11 @@ public class Context {
     }
 
     public Context(Token t, Token t2) {
-        this.source = t.getToken() + "\n" + t2.getToken();
         this.file = (t.getFile().equals(t2.getFile()) ? t.getFile() : String.format("'%s' and '%s'", t.getFile(), t2.getFile()));
         this.endLine = t2.getLine();
         this.startLine = t.getLine();
         this.endCol = t2.getCol();
         this.startCol = t.getCol();
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
     }
 
     public long getStartLine() {

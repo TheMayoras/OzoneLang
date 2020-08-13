@@ -22,4 +22,5 @@ public interface ErrorConstants {
     String CLASSLOADER_E        = "ClassLoaderError";
     String VALUE_EXPECTED_E     = "ValueExpectedError";
     String TYPE_MISMATCH_E      = "TypeMismatchError";
+    String NAME_NOT_FOUND_E     = "UnresolvedSymbolError";
 }
