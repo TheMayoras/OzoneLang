@@ -51,11 +51,6 @@ public abstract class CodeNode {
     }
 
     /**
-     * Whether this CodeNode is a value expression or not
-     */
-    public abstract boolean hasReturnValue();
-
-    /**
      * The contexts of this CodeNode
      */
     protected List<Context> contexts = new ArrayList<>();

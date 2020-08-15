@@ -18,6 +18,7 @@
 package ozonelang.ozone.core.runtime.type;
 
 import ozonelang.ozone.core.lexer.Context;
+import ozonelang.ozone.core.parser.Parser;
 
 public class OzShort extends OzObject {
     private short value;
@@ -25,6 +26,11 @@ public class OzShort extends OzObject {
     public OzShort(short value, Context... contexts) {
         super(value, contexts);
         this.value = value;
+    }
+
+    @Override
+    public OzObject callOperator(Parser.ExpressionParser.Operator op, OzObject o) {
+        return super.callOperator(op, o);
     }
 
     @Override

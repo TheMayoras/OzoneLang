@@ -19,7 +19,10 @@ package ozonelang.ozone.core.runtime.type;
 
 import org.apache.commons.lang3.SerializationUtils;
 import ozonelang.ozone.core.lexer.Context;
+import ozonelang.ozone.core.parser.Parser;
 import ozonelang.ozone.core.runtime.access.Accessible;
+import ozonelang.ozone.core.runtime.exception.OzoneException;
+import ozonelang.ozone.core.runtime.exception.StackTrace;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -27,6 +30,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
 
 public class OzObject implements Serializable, Accessible {
     private static final long serialVersionUID = 7932392952560561002L;
@@ -68,8 +73,15 @@ public class OzObject implements Serializable, Accessible {
         return null;
     }
 
-    @Override
-    public <T extends OzObject> void setProperty(T value) {
-
+    public OzObject callOperator(Parser.ExpressionParser.Operator op, OzObject o) {
+        raiseEx(new OzoneException(new UnsupportedOperationException(
+                String.format("cannot apply operator '%s' on types '%s', '%s'", op.getOperator(), getClass().getSimpleName(),
+                        getClass().getSimpleName())),
+                new StackTrace(getContexts().toArray(new Context[0])), true)
+        );
+        return null;
     }
+
+    @Override
+    public <T extends OzObject> void setProperty(T value) {}
 }

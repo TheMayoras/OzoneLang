@@ -44,9 +44,4 @@ public final class FunctionCallNode extends CodeNode {
     public List<CodeNode> getChildren() {
         return null;
     }
-
-    @Override
-    public boolean hasReturnValue() {
-        return true;
-    }
 }

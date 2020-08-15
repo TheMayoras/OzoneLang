@@ -17,10 +17,6 @@
 
 package ozonelang.ozone;
 
-import ozonelang.ozone.core.ast.Literal;
-import ozonelang.ozone.core.ast.node.Expression;
-import ozonelang.ozone.core.ast.node.arithmetic.bool.Or;
-import ozonelang.ozone.core.lexer.Context;
 import ozonelang.ozone.core.lexer.Lexer;
 import ozonelang.ozone.core.lexer.TokenStream;
 
