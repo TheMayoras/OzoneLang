@@ -32,19 +32,20 @@
  * along with Ozone.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ozonelang.ozone.core.ast.node;
+package ozonelang.ozone.core.ast.node.expr;
 
+import ozonelang.ozone.core.ast.node.CodeNode;
 import ozonelang.ozone.core.lexer.Context;
 
-public abstract class Expression extends CodeNode {
-    public enum Type {
-        UNARY,
-        BINARY
-    }
+import java.util.List;
 
-    public Expression(CodeNode parent, Context... contexts) {
+public class VariableAssignmentNode extends CodeNode {
+    public VariableAssignmentNode(CodeNode parent, Context... contexts) {
         super(parent, contexts);
     }
 
-    public abstract void evaluate();
+    @Override
+    public List<CodeNode> getChildren() {
+        return null;
+    }
 }
