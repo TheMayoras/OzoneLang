@@ -59,7 +59,7 @@ public class OzString extends OzObject implements Serializable {
 
     @Override
     @SuppressWarnings("ConstantConditions")
-    public OzObject callOperator(Parser.ExpressionParser.Operator op, OzObject s) {
+    public OzObject callOperator(Parser.Operator op, OzObject s) {
         OzString val = null;
         if (s instanceof OzString)
             val = (OzString) s;
@@ -78,7 +78,7 @@ public class OzString extends OzObject implements Serializable {
             case EQ:
                 return new OzBool(getValue().equals(val.getValue()));
             /*
-             * This is just kinda the same with slight differences.
+             * These are just kinda the same with slight differences.
              */
             case GT: {
                 var me = getValue();

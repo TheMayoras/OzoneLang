@@ -15,31 +15,19 @@
  * along with Ozone.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ozonelang.ozone.core.runtime.type;
+package ozonelang.ozone.core.ast.node;
 
 import ozonelang.ozone.core.lexer.Context;
-import ozonelang.ozone.core.parser.Parser;
 
-public class OzShort extends OzObject {
-    private short value;
+import java.util.List;
 
-    public OzShort(short value, Context... contexts) {
-        super(value, contexts);
-        this.value = value;
+public class VariableAssignmentNode extends CodeNode {
+    public VariableAssignmentNode(CodeNode parent, Context... contexts) {
+        super(parent, contexts);
     }
 
     @Override
-    public OzString genericName() {
-        return OzString.fromString("short");
-    }
-
-    @Override
-    public OzString repr() {
-        return OzString.fromString(String.valueOf(this.value));
-    }
-
-    @Override
-    public Short getValue() {
-        return value;
+    public List<CodeNode> getChildren() {
+        return null;
     }
 }

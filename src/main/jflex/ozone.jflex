@@ -169,8 +169,8 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
     "..."                          { return makeToken(SymbolType.CONCAT_COMMA); }
     ".."                           { return makeToken(SymbolType.CONCAT_SPACE); }
     "."                            { return makeToken(SymbolType.DOT); }
-    ":"                            { return makeToken(SymbolType.COLON); }
     "::"                           { return makeToken(SymbolType.MODULE_SEPARATOR); }
+    ":"                            { return makeToken(SymbolType.COLON); }
     "@"                            { return makeToken(SymbolType.AT); }
     "#"                            { return makeToken(SymbolType.HASHTAG); }
     ")"                            { return makeToken(SymbolType.RPAREN); }
@@ -180,6 +180,10 @@ Identifier =  [_a-zåäöA-ZÅÄÖ]+[_a-zåäöA-ZÅÄÖ0-9]*
     "}"                            { return makeToken(SymbolType.RBRACE); }
     "{"                            { return makeToken(SymbolType.LBRACE); }
     ","                            { return makeToken(SymbolType.COMMA); }
+    ">"                            { return makeToken(SymbolType.GT); }
+    "<"                            { return makeToken(SymbolType.LT); }
+    ">="                           { return makeToken(SymbolType.GTEQ); }
+    "<="                           { return makeToken(SymbolType.LTEQ); }
 
 
     /* comments */

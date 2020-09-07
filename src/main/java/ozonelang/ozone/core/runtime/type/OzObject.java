@@ -73,10 +73,9 @@ public class OzObject implements Serializable, Accessible {
         return null;
     }
 
-    public OzObject callOperator(Parser.ExpressionParser.Operator op, OzObject o) {
+    public OzObject callOperator(Parser.Operator op, OzObject o) {
         raiseEx(new OzoneException(new UnsupportedOperationException(
-                String.format("cannot apply operator '%s' on types '%s', '%s'", op.getOperator(), getClass().getSimpleName(),
-                        getClass().getSimpleName())),
+                String.format("cannot apply operator '%s' on types '%s', '%s'", op.getOperator(), genericName(), genericName())),
                 new StackTrace(getContexts().toArray(new Context[0])), true)
         );
         return null;

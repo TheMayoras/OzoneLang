@@ -15,31 +15,34 @@
  * along with Ozone.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ozonelang.ozone.core.runtime.type;
+package ozonelang.ozone.core.ast.node;
 
 import ozonelang.ozone.core.lexer.Context;
-import ozonelang.ozone.core.parser.Parser;
 
-public class OzShort extends OzObject {
-    private short value;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
-    public OzShort(short value, Context... contexts) {
-        super(value, contexts);
-        this.value = value;
+public final class RootNode extends CodeNode {
+    RootNode(Context... contexts) {
+        super(null, contexts);
     }
 
     @Override
-    public OzString genericName() {
-        return OzString.fromString("short");
+    public List<CodeNode> getChildren() {
+        return null;
     }
 
-    @Override
-    public OzString repr() {
-        return OzString.fromString(String.valueOf(this.value));
+    public static RootNode getInstance(CodeNode... children) {
+        var contexts = new ArrayList<Context>();
+        Arrays.asList(children).forEach(c -> {
+            contexts.addAll(c.getContexts());
+        });
+        return new RootNode(contexts.toArray(Context[]::new));
     }
 
-    @Override
-    public Short getValue() {
-        return value;
+    public static RootNode getInstance(Collection<CodeNode> children) {
+        return getInstance(children.toArray(CodeNode[]::new));
     }
 }

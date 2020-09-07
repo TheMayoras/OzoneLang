@@ -18,6 +18,7 @@
 package ozonelang.ozone.core.runtime.type;
 
 import ozonelang.ozone.core.lexer.Context;
+import ozonelang.ozone.core.parser.Parser;
 import ozonelang.ozone.core.runtime.exception.ErrorConstants;
 import ozonelang.ozone.core.runtime.exception.OzoneException;
 import ozonelang.ozone.core.runtime.exception.StackTrace;

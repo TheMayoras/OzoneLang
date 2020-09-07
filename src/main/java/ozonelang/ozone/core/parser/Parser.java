@@ -23,6 +23,9 @@ import ozonelang.ozone.core.lexer.Context;
 import ozonelang.ozone.core.lexer.Lexer;
 import ozonelang.ozone.core.lexer.SymbolType;
 import ozonelang.ozone.core.lexer.TokenStream;
+import ozonelang.ozone.core.runtime.exception.ErrorConstants;
+import ozonelang.ozone.core.runtime.exception.OzoneException;
+import ozonelang.ozone.core.runtime.exception.StackTrace;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,11 +34,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
+
 public final class Parser {
     public static final String EOF = "<EOF>";
     private final TokenStream stream;
     private final Lexer lexer;
     private final ArrayList<Context> contexts = new ArrayList<>();
+
     public Parser(InputStream in, String filename) throws IOException {
         lexer = new Lexer(new InputStreamReader(in), filename);
         stream = TokenStream.open(lexer);
@@ -69,51 +75,70 @@ public final class Parser {
         return lexer;
     }
 
-    public static class ExpressionParser {
-
-        public enum Operator {
-            AND("&&"),
-            BAND("&"),
-            BNEG("~"),
-            BOR("|"),
-            BSIGNEDL("<<"),
-            BSIGNEDR(">>"),
-            BUNSIGNEDL("<<<"),
-            BUNSIGNEDR(">>>"),
-            BXOR("^"),
-            DIV("/"),
-            EQ("=="),
-            GT(">"),
-            GTEQ(">="),
-            MINUS("-"),
-            MOD("%"),
-            MUL("*"),
-            NOT("!"),
-            NOTEQ("!="),
-            OR("||"),
-            PLUS("+"),
-            POW("^^"),
-            LT("<"),
-            LTEQ("<="),
-            STRCOMMA("..."),
-            STRSPACE("..");
-
-            private final String op;
-
-            Operator(String literal) {
-                this.op = literal;
-            }
-
-            public String getOperator() {
-                return op;
+    @ParsingFunction
+    public void parseExpression(TokenStream substream) {
+        final SymbolType[] ARITHMETIC = {
+                SymbolType.PLUS, SymbolType.MINUS,
+                SymbolType.MUL, SymbolType.DIV,
+                SymbolType.MOD, SymbolType.POW,
+        };
+        final SymbolType[] BOOLEAN = {
+                SymbolType.GT, SymbolType.LT,
+                SymbolType.GTEQ, SymbolType.LTEQ,
+                SymbolType.EQ, SymbolType.NOTEQ,
+                SymbolType.NOT,
+        };
+        while (substream.hasNext()) {
+            if (substream.acceptIfNext(SymbolType.INTEGER_LITERAL)) {
+                if (!substream.acceptIfNext(ARITHMETIC) || substream.acceptIfNext(BOOLEAN))
+                    raiseEx(new OzoneException(
+                            String.format("cannot apply operator '%s' on types '%s', '%s'", stream.seekString(),
+                                    "integer", "integer"),
+                            ErrorConstants.TYPE_MISMATCH_E,
+                            new StackTrace(contexts.toArray(new Context[0])),
+                            true
+                    ));
+            } else if (substream.acceptIfNext(SymbolType.FLOAT_LITERAL)) {
+                
             }
         }
-        private TokenStream stream;
+    }
 
-        @ParsingFunction
-        public void parseExpression(TokenStream substream) {
-            this.stream = substream;
+    public enum Operator {
+        AND("&&"),
+        BAND("&"),
+        BNEG("~"),
+        BOR("|"),
+        BSIGNEDL("<<"),
+        BSIGNEDR(">>"),
+        BUNSIGNEDL("<<<"),
+        BUNSIGNEDR(">>>"),
+        BXOR("^"),
+        DIV("/"),
+        EQ("=="),
+        GT(">"),
+        GTEQ(">="),
+        MINUS("-"),
+        MOD("%"),
+        MUL("*"),
+        NOT("!"),
+        NOTEQ("!="),
+        OR("||"),
+        PLUS("+"),
+        POW("^^"),
+        LT("<"),
+        LTEQ("<="),
+        STRCOMMA("..."),
+        STRSPACE("..");
 
+        private final String op;
+
+        Operator(String literal) {
+            this.op = literal;
+        }
+
+        public String getOperator() {
+            return op;
         }
     }
 }
