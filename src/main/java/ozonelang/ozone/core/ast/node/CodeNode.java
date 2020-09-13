@@ -25,17 +25,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
+import static java.lang.System.identityHashCode;
 
 /**
- * A base class representing a statement
- * or block in source code.
+ * A base class representing a statement,
+ * an expression or a block in source code.
  */
 public abstract class CodeNode {
+    protected final List<CodeNode> children = new ArrayList<>();
+
     /**
      * Get the children of this CodeNode
      */
-    public abstract List<CodeNode> getChildren();
+    public List<CodeNode> getChildren() {
+        return children;
+    }
 
     /**
      * The parent of this CodeNode
@@ -69,26 +73,31 @@ public abstract class CodeNode {
         return getContexts().toArray(new Context[0]);
     }
 
+    public void addChild(CodeNode child) {
+        children.add(child);
+    }
+
     @Override
     public String toString() {
-        return String.format("[%s %d:%d-%d:%d]",
-                             contexts.get(1).getFile(),
-                             contexts.get(1).getStartLine(),
-                             contexts.get(1).getStartCol(),
-                             contexts.get(1).getStartLine(),
-                             contexts.get(1).getEndCol()
-        );
+        if (contexts.size() > 0)
+            return String.format("[%s %d:%d-%d:%d]",
+                                 contexts.get(1).getFile(),
+                                 contexts.get(1).getStartLine(),
+                                 contexts.get(1).getStartCol(),
+                                 contexts.get(1).getStartLine(),
+                                 contexts.get(1).getEndCol()
+            );
+        return String.format("[%s %s]", getClass().getSimpleName(), Integer.toHexString(identityHashCode(this)));
     }
     /**
      * Creates a new instance of CodeNode
      *
      * @param contexts The {@link Context} objects
      * this CodeNode is related to
+     * @param parent The parent of this CodeNode
      */
     public CodeNode(CodeNode parent, Context... contexts) {
         this.parent = parent;
-        if (contexts.length < 1)
-            raiseEx(new RuntimeException(String.format("WARNING: internal error at file '%s.java'", getClass().getName().replace(".", "/"))), true, contexts);
         this.contexts.addAll(Arrays.asList(contexts));
     }
 

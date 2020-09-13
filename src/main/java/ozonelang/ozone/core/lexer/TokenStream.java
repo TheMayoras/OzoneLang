@@ -30,7 +30,7 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-import static ozonelang.ozone.core.lexer.ParsingError.expected;
+import static ozonelang.ozone.core.lexer.LexicalError.expected;
 
 public class TokenStream implements Iterable<Token> {
     private Lexer lexer;
@@ -47,7 +47,7 @@ public class TokenStream implements Iterable<Token> {
     /**
      * Accepts a token at the current index.
      *
-     * @throws ParsingError If an invalid token occurs
+     * @throws LexicalError If an invalid token occurs
      * @param applicant Acceptable tokens
      * @return The accepted token
      */
@@ -65,7 +65,7 @@ public class TokenStream implements Iterable<Token> {
     /**
      * Accepts a symbol type at the current index.
      *
-     * @throws ParsingError If an invalid token occurs
+     * @throws LexicalError If an invalid token occurs
      * @param applicant Acceptable symbol type
      * @return The accepted token
      */
@@ -223,7 +223,7 @@ public class TokenStream implements Iterable<Token> {
     public Token acceptIdentifier() {
         Token token = tokens.get(idx++);
         if (!token.getToken().matches("[_a-zA-Z][_a-zA-Z0-9]+ | _+")) {
-            throw new ParsingError(String.format("expected identifier, got '%s'",
+            throw new LexicalError(String.format("expected identifier, got '%s'",
                     token.getToken()), token.getFile(), token.getLine(), token.getCol());
         }
         return token;

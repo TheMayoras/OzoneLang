@@ -20,24 +20,42 @@ package ozonelang.ozone.core.ast.node.expr;
 import ozonelang.ozone.core.ast.node.CodeNode;
 import ozonelang.ozone.core.lexer.Context;
 
-public abstract class Expression extends CodeNode {
+public abstract class Expression extends CodeNode implements Precedence {
     public enum Type {
-        UNARY,
-        BINARY,
         ASSIGN,
-        LITERAL,
+        BINARY,
+        BITWISE,
         FUNCCALL,
+        IFEXPRESSION,
+        LITERAL,
+        LOGICAL,
         OBJECTCREATION,
+        PARENTHESES,
+        ROOT,
+        UNARY,
     }
 
-    private final Type type;
+    protected final Type type;
+    protected final int precedence;
 
-    public Expression(Type type, CodeNode parent, Context... contexts) {
+    public Expression(Type type, int precedence, CodeNode parent, Context... contexts) {
         super(parent, contexts);
         this.type = type;
+        this.precedence = precedence;
     }
 
-    public abstract void evaluate();
+    @Override
+    public void addChild(CodeNode child) {
+        if (!(child instanceof Expression))
+            throw new RuntimeException(String.format("unexpected type: '%s'", child.getClass().getSimpleName()));
+        super.addChild(child);
+    }
+
+    public abstract <T> Object evaluate();
+
+    public final int getPrecedence() {
+        return precedence;
+    }
 
     public final Type getType() {
         return type;

@@ -19,6 +19,7 @@ package ozonelang.ozone.core.parser;
 
 import ozonelang.ozone.core.ast.node.CodeNode;
 import ozonelang.ozone.core.ast.node.RootNode;
+import ozonelang.ozone.core.ast.node.expr.RootExpression;
 import ozonelang.ozone.core.lexer.Context;
 import ozonelang.ozone.core.lexer.Lexer;
 import ozonelang.ozone.core.lexer.SymbolType;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import static ozonelang.ozone.core.runtime.exception.OzoneException.raiseEx;
 
@@ -75,6 +77,18 @@ public final class Parser {
         return lexer;
     }
 
+    private void generateContext() {
+        contexts.add(new Context(
+            stream.seek().getFile(),
+            stream.seek().getLine(),
+            stream.seek().getCol()
+        ));
+    }
+
+    private void endBlock() {
+        contexts.clear();
+    }
+
     @ParsingFunction
     public void parseExpression(TokenStream substream) {
         final SymbolType[] ARITHMETIC = {
@@ -104,14 +118,12 @@ public final class Parser {
         }
     }
 
-    public enum Operator {
+    public enum BinaryOperator {
         AND("&&"),
         BAND("&"),
-        BNEG("~"),
         BOR("|"),
         BSIGNEDL("<<"),
         BSIGNEDR(">>"),
-        BUNSIGNEDL("<<<"),
         BUNSIGNEDR(">>>"),
         BXOR("^"),
         DIV("/"),
@@ -121,7 +133,6 @@ public final class Parser {
         MINUS("-"),
         MOD("%"),
         MUL("*"),
-        NOT("!"),
         NOTEQ("!="),
         OR("||"),
         PLUS("+"),
@@ -133,12 +144,34 @@ public final class Parser {
 
         private final String op;
 
-        Operator(String literal) {
+        BinaryOperator(String literal) {
             this.op = literal;
         }
 
         public String getOperator() {
             return op;
         }
+    }
+
+    public enum UnaryOperator {
+        BNEG("~"),
+        NOT("!"),
+        PLUS("+"),
+        MINUS("-");
+
+        private final String op;
+
+        UnaryOperator(String literal) {
+            this.op = literal;
+        }
+
+        public String getOperator() {
+            return op;
+        }
+    }
+
+    @ParsingFunction(expression = "(1 + 2) *  3--3")
+    public RootExpression parseExpression() {
+        return null;
     }
 }

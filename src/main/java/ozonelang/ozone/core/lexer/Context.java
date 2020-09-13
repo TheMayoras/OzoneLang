@@ -21,8 +21,8 @@ public class Context {
     private String file;
     private long startLine;
     private long endLine;
-    private long startCol;
-    private long endCol;
+    private long startCol = 0;
+    private long endCol = 0;
 
     public Context(String file, long startLine, long endLine, long startCol, long endCol) {
         this.file = file;
@@ -46,6 +46,15 @@ public class Context {
         this.startLine = t.getLine();
         this.endCol = t2.getCol();
         this.startCol = t.getCol();
+    }
+
+    /**
+     * For use with java stack trace conversion.
+     */
+    public Context(StackTraceElement se) {
+        this.file = se.getFileName();
+        this.startLine = se.getLineNumber();
+        this.endLine = se.getLineNumber();
     }
 
     public long getStartLine() {

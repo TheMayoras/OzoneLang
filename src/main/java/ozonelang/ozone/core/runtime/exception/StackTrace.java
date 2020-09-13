@@ -38,6 +38,13 @@ public class StackTrace {
         outStream = output;
         codePoints.addAll(Arrays.asList(contexts));
     }
+
+    public StackTrace(PrintStream output, StackTraceElement... elements) {
+        this.outStream = output;
+        for (var e : elements)
+            codePoints.add(new Context(e));
+    }
+
     public List<Context> getLocations() {
         return Collections.unmodifiableList(codePoints);
     }
