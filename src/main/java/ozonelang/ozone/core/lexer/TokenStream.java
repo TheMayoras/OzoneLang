@@ -34,7 +34,7 @@ import static ozonelang.ozone.core.lexer.LexicalError.expected;
 
 public class TokenStream implements Iterable<Token> {
     private Lexer lexer;
-    private List<Token> tokens;
+    private final List<Token> tokens;
     private int idx;
     private boolean addedEOF = false;
 
@@ -52,7 +52,7 @@ public class TokenStream implements Iterable<Token> {
      * @return The accepted token
      */
     public Token accept(String... applicant) {
-        var token = tokens.get(idx++);
+        var token = tokens.get(idx);
         for (var v : applicant) {
             if (v.equals(token.getToken())) {
                 idx++;

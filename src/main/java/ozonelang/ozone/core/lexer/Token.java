@@ -23,10 +23,10 @@ import java.util.regex.Pattern;
 public class Token {
     private String token;
     private Object value;
-    private String file;
-    private SymbolType sym;
-    private int line;
-    private int col;
+    private final String file;
+    private final SymbolType sym;
+    private final int line;
+    private final int col;
 
     public Token(String file, SymbolType sym, Object value, int line, int col) {
         this.token = String.valueOf(value);

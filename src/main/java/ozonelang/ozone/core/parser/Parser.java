@@ -89,35 +89,6 @@ public final class Parser {
         contexts.clear();
     }
 
-    @ParsingFunction
-    public void parseExpression(TokenStream substream) {
-        final SymbolType[] ARITHMETIC = {
-                SymbolType.PLUS, SymbolType.MINUS,
-                SymbolType.MUL, SymbolType.DIV,
-                SymbolType.MOD, SymbolType.POW,
-        };
-        final SymbolType[] BOOLEAN = {
-                SymbolType.GT, SymbolType.LT,
-                SymbolType.GTEQ, SymbolType.LTEQ,
-                SymbolType.EQ, SymbolType.NOTEQ,
-                SymbolType.NOT,
-        };
-        while (substream.hasNext()) {
-            if (substream.acceptIfNext(SymbolType.INTEGER_LITERAL)) {
-                if (!substream.acceptIfNext(ARITHMETIC) || substream.acceptIfNext(BOOLEAN))
-                    raiseEx(new OzoneException(
-                            String.format("cannot apply operator '%s' on types '%s', '%s'", stream.seekString(),
-                                    "integer", "integer"),
-                            ErrorConstants.TYPE_MISMATCH_E,
-                            new StackTrace(contexts.toArray(new Context[0])),
-                            true
-                    ));
-            } else if (substream.acceptIfNext(SymbolType.FLOAT_LITERAL)) {
-                
-            }
-        }
-    }
-
     public enum BinaryOperator {
         AND("&&"),
         BAND("&"),

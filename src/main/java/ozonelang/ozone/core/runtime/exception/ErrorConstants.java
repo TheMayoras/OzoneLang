@@ -24,4 +24,5 @@ public interface ErrorConstants {
     String TYPE_MISMATCH_E      = "TypeMismatchError";
     String NAME_NOT_FOUND_E     = "UnresolvedSymbolError";
     String CONST_ASSIGN_E       = "ConstantAssignmentError";
+    String ALREADY_DEFINED_E    = "DuplicateValueError";
 }
